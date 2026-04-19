@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real Estate Cash Flow Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/#start">The Spanish Wealth Model</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"
+        aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <a href="/#about">About</a>
+        <a href="/#learn">What You'll Learn</a>
+        <a href="/calculator/">Calculator</a>
+        <a href="/#purchase">Purchase</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <a class="button button-small button-secondary nav-cta" href="/calculator/">Open
+        Calculator</a>
+    </div>
+  </header>
+
+  <div class="page-shell">
+
+    <header class="hero">
+      <p class="eyebrow">REAL ESTATE ANALYSIS TOOL</p>
+      <h1>Analyze real estate deals in minutes</h1>
+      <p class="subtitle">
+        A simple cashflow-first calculator to evaluate rental properties using practical, real-world assumptions.
+      </p>
+      <p class="book-reference">
+        Built on the framework from <strong>The Spanish Wealth Model</strong>
+        <span class="book-reference-secondary">(Das spanische Vermögensmodell)</span>.
+      </p>
+    </header>
+
+    <p class="tool-note">
+      Simplified model. No individual tax, financing, legal, or investment advice.
+    </p>
+
+    <main class="app-grid" aria-label="Real estate cash flow calculator">
+      <section class="panel panel-inputs">
+        <div class="panel-header">
+          <h2>Inputs</h2>
+          <button id="resetButton" class="reset-button" type="button">Reset to Example</button>
+        </div>
+
+        <div class="inline-note">
+          Example values are loaded by default. Update any field to model your own scenario.
+        </div>
+
+        <section class="input-section">
+          <h3>Property</h3>
+          <div class="field-grid">
+            <label class="field">
+              <span>Purchase Price (€)</span>
+              <input id="purchasePrice" type="number" min="0" step="1000" />
+            </label>
+            <label class="field">
+              <span>Closing Costs (%)</span>
+              <input id="closingCostsPercent" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field">
+              <span>Monthly Rent (€)</span>
+              <input id="monthlyRent" type="number" min="0" step="50" />
+            </label>
+            <label class="field">
+              <span>Expected Vacancy (months/year)</span>
+              <input id="vacancyMonths" type="number" min="0" max="12" step="1" />
+            </label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Financing</h3>
+          <p class="section-hint">
+            Enter your own capital contribution. <strong>Loan Amount</strong> and <strong>Loan-to-Value (LTV)</strong>
+            are derived automatically.
+          </p>
+          <div class="field-grid">
+            <label class="field">
+              <span>Equity (€)</span>
+              <input id="equity" type="number" min="0" step="1000" />
+              <small>Enter your own capital contribution. Loan amount and LTV are derived automatically.</small>
+            </label>
+            <label class="field">
+              <span>Interest Rate (% p.a.)</span>
+              <input id="interestRate" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field">
+              <span>Loan Term (years)</span>
+              <input id="loanTerm" type="number" min="1" step="1" />
+            </label>
+          </div>
+          <div id="equityHint" class="status-hint" aria-live="polite"></div>
+        </section>
+
+        <section class="input-section">
+          <h3>Ongoing Costs</h3>
+          <div class="toggle-row" role="group" aria-label="Maintenance reserve input mode">
+            <span class="toggle-label">Maintenance Reserve</span>
+            <div class="toggle-group">
+              <button class="toggle-button is-active" type="button" data-maintenance-mode="percent">% of purchase
+                price</button>
+              <button class="toggle-button" type="button" data-maintenance-mode="annual">€/year</button>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="field">
+              <span id="maintenanceLabel">Maintenance Reserve (% of Purchase Price)</span>
+              <input id="maintenanceValue" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field field-wide">
+              <span>Non-recoverable Costs (€/year)</span>
+              <input id="otherCosts" type="number" min="0" step="50" />
+              <small>
+                Example: non-recoverable service charges, insurance, administration, and smaller ongoing costs.
+              </small>
+            </label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Optional</h3>
+          <div class="field-grid">
+            <label class="field field-wide">
+              <span>Annual Appreciation (%)</span>
+              <input id="appreciationRate" type="number" min="0" step="0.1" />
+              <small>Default is 0% for a conservative baseline.</small>
+            </label>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel panel-results">
+        <div class="panel-header">
+          <h2>Results</h2>
+          <p class="results-meta">All values update live as you change the inputs.</p>
+        </div>
+
+        <section class="assessment-card assessment-card--top">
+          <div id="assessmentBadge" class="assessment-badge">Loading assessment</div>
+          <p id="assessmentRange" class="assessment-range"></p>
+          <p id="interpretationText" class="interpretation-text"></p>
+        </section>
+
+        <section class="result-card">
+          <h3>Investment Overview</h3>
+          <dl class="result-list">
+            <div>
+              <dt>Closing Costs</dt>
+              <dd id="resultClosingCosts"></dd>
+            </div>
+            <div>
+              <dt>Total Investment</dt>
+              <dd id="resultTotalInvestment"></dd>
+            </div>
+            <div>
+              <dt>Loan Amount</dt>
+              <dd id="resultLoanAmount"></dd>
+            </div>
+            <div>
+              <dt>Loan-to-Value (LTV) <span class="inline-meta">— automatically calculated</span></dt>
+              <dd id="resultLtv"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="result-card">
+          <h3>Rental and Cost Base</h3>
+          <dl class="result-list">
+            <div>
+              <dt>Annual Rent (adjusted)</dt>
+              <dd id="resultAnnualRent"></dd>
+            </div>
+            <div>
+              <dt>Maintenance Reserve</dt>
+              <dd id="resultMaintenance"></dd>
+            </div>
+            <div>
+              <dt>Non-recoverable Costs</dt>
+              <dd id="resultOtherCosts"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="result-card">
+          <h3>Financing</h3>
+          <dl class="result-list">
+            <div>
+              <dt>Annual Debt Service / Annuity</dt>
+              <dd id="resultAnnuity"></dd>
+            </div>
+            <div>
+              <dt>Interest Portion Year 1</dt>
+              <dd id="resultInterestYear1"></dd>
+            </div>
+            <div>
+              <dt>Principal Repayment Year 1</dt>
+              <dd id="resultPrincipalYear1"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="result-card">
+          <h3>Cash Flow</h3>
+          <dl class="result-list">
+            <div>
+              <dt>Cash Flow (before financing) <span class="inline-meta">— before debt service</span></dt>
+              <dd id="resultOperatingCashFlow"></dd>
+            </div>
+            <div>
+              <dt>Free Cash Flow <span class="inline-meta">— after full financing</span></dt>
+              <dd id="resultFreeCashFlow"></dd>
+            </div>
+            <div>
+              <dt>Free Cash Flow / Month</dt>
+              <dd id="resultFreeCashFlowMonth"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="result-card">
+          <h3>Wealth Effect</h3>
+          <dl class="result-list">
+            <div>
+              <dt>Equity Build-up (Principal Repayment)</dt>
+              <dd id="resultPrincipalWealth"></dd>
+            </div>
+            <div>
+              <dt>Total Annual Wealth Gain</dt>
+              <dd id="resultEconomicEffect" class="metric-emphasis"></dd>
+            </div>
+            <div>
+              <dt>Total Wealth Gain (with appreciation)</dt>
+              <dd id="resultEconomicEffectAppreciation" class="metric-emphasis"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="result-card">
+          <h3>Return</h3>
+          <dl class="result-list">
+            <div>
+              <dt>Return on Equity (ROE)</dt>
+              <dd id="resultRoe" class="metric-emphasis metric-emphasis--strong"></dd>
+            </div>
+            <div>
+              <dt>ROE incl. Appreciation</dt>
+              <dd id="resultRoeAppreciation"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="assessment-card summary-card">
+          <p id="summaryInsight" class="summary-insight"></p>
+        </section>
+
+        <section class="assessment-card">
+          <div id="assessmentNote" class="assessment-note"></div>
+        </section>
+      </section>
+    </main>
+
+    <section class="contact-block">
+      <p class="contact-kicker">Questions about the model or how to interpret the result?</p>
+      <p><a href="mailto:cashflowblueprint.app@gmail.com">>> Contact us via email << </a>
+      </p>
+    </section>
+
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Legal links">
+        <a href="../imprint.html">Imprint</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+      <p>Free tool for conservative pre-screening of real estate investments.</p>
+    </footer>
+  </div>
+
+  <script src="script-en.js"></script>
+</body>
+
+</html>
