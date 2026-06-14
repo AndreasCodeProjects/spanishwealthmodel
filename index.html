@@ -14,14 +14,14 @@
 <meta property="og:title" content="Beckham-Law & Immobilien in Spanien | Das Spanische Vermögensmodell">
 <meta property="og:description" content="Ein praxiserprobtes 6-Phasen-System für Spanien-Setup, Beckham-Law, Immobilien, Cashflow und langfristigen Vermögensaufbau.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://www.spanishwealthmodel.com">
-<meta property="og:image" content="https://www.spanishwealthmodel.com/spanish_wealth_model.png">
+<meta property="og:url" content="https://spanishwealthmodel.com">
+<meta property="og:image" content="https://spanishwealthmodel.com/spanish_wealth_model.png">
 <meta property="og:image:alt" content="Cover des Buchs Das Spanische Vermögensmodell">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Beckham-Law & Immobilien in Spanien | Das Spanische Vermögensmodell">
 <meta name="twitter:description" content="Deutschsprachiges Buch über Auswandern nach Spanien, Beckham-Law, Immobilien, Hypotheken, Cashflow und finanzielle Unabhängigkeit.">
-<meta name="twitter:image" content="https://www.spanishwealthmodel.com/spanish_wealth_model.png">
-<link rel="canonical" href="https://www.spanishwealthmodel.com">
+<meta name="twitter:image" content="https://spanishwealthmodel.com/spanish_wealth_model.png">
+<link rel="canonical" href="https://spanishwealthmodel.com">
 <script src="analytics.js" defer></script>
 <script type="application/ld+json">
 {
@@ -29,18 +29,18 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.spanishwealthmodel.com/#website",
-      "url": "https://www.spanishwealthmodel.com",
+      "@id": "https://spanishwealthmodel.com/#website",
+      "url": "https://spanishwealthmodel.com",
       "name": "Das Spanische Vermögensmodell",
       "inLanguage": "de"
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.spanishwealthmodel.com/#webpage",
-      "url": "https://www.spanishwealthmodel.com",
+      "@id": "https://spanishwealthmodel.com/#webpage",
+      "url": "https://spanishwealthmodel.com",
       "name": "Beckham-Law & Immobilien in Spanien | Das Spanische Vermögensmodell",
       "description": "Deutschsprachiges Buch über Auswandern nach Spanien, Beckham-Law, Steuern, Immobilien, Hypotheken, Cashflow und Vermögensaufbau in Spanien.",
-      "isPartOf": { "@id": "https://www.spanishwealthmodel.com/#website" },
+      "isPartOf": { "@id": "https://spanishwealthmodel.com/#website" },
       "about": [
         "Beckham-Law Spanien",
         "Immobilien in Spanien",
@@ -52,22 +52,22 @@
     },
     {
       "@type": "Person",
-      "@id": "https://www.spanishwealthmodel.com/#author",
+      "@id": "https://spanishwealthmodel.com/#author",
       "name": "Andreas Steinhausen",
       "jobTitle": "Software Engineer und privater Investor",
       "homeLocation": "Valencia, Spanien"
     },
     {
       "@type": "Book",
-      "@id": "https://www.spanishwealthmodel.com/#book",
+      "@id": "https://spanishwealthmodel.com/#book",
       "name": "Das Spanische Vermögensmodell",
       "alternateName": "The Spanish Wealth Model",
-      "author": { "@id": "https://www.spanishwealthmodel.com/#author" },
+      "author": { "@id": "https://spanishwealthmodel.com/#author" },
       "bookFormat": "https://schema.org/EBook",
       "inLanguage": "de",
-      "image": "https://www.spanishwealthmodel.com/spanish_wealth_model.png",
+      "image": "https://spanishwealthmodel.com/spanish_wealth_model.png",
       "description": "Ein praxiserprobter Leitfaden für Arbeit, Steuern, Immobilien, Cashflow und finanzielle Unabhängigkeit in Spanien.",
-      "publisher": { "@id": "https://www.spanishwealthmodel.com/#author" }
+      "publisher": { "@id": "https://spanishwealthmodel.com/#author" }
     }
   ]
 }
@@ -117,8 +117,9 @@ nav {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
   padding: 0 5vw;
-  height: 62px;
+  min-height: 62px;
   display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
 }
 .nav-brand {
   font-family: 'Cormorant Garamond', serif;
@@ -126,9 +127,10 @@ nav {
   color: var(--navy);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  min-width: 0;
 }
 .nav-brand span { color: var(--gold); }
-.nav-links { display: flex; gap: 2.2rem; align-items: center; }
+.nav-links { display: flex; gap: 2.2rem; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
 .nav-links a {
   font-size: 0.78rem; font-weight: 400;
   letter-spacing: 0.1em; text-transform: uppercase;
@@ -551,6 +553,7 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 860px) {
+  nav { padding-top: 0.8rem; padding-bottom: 0.8rem; }
   .hero { grid-template-columns: 1fr; padding: 70px 5vw 60px; gap: 0; }
   .cover-wrap { margin-top: 2.5rem; justify-content: flex-start; }
   .book-cover-img { width: min(220px, 70vw); max-width: 70vw; }
@@ -562,6 +565,27 @@ footer {
   .footer-links { justify-content: flex-start; flex-wrap: wrap; }
   .footer-copy { justify-self: start; }
   .nav-links { gap: 1.2rem; }
+}
+@media (max-width: 680px) {
+  nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .nav-brand {
+    font-size: 0.98rem;
+    line-height: 1.25;
+  }
+  .nav-links {
+    justify-content: flex-start;
+    gap: 0.75rem 1rem;
+  }
+  .nav-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+  .btn-nav {
+    padding: 0.38rem 0.85rem;
+  }
 }
 @media (max-width: 520px) {
   .hero-badges { grid-template-columns: 1fr; }
@@ -884,6 +908,7 @@ footer {
     <a href="datenschutz.html">Datenschutz</a>
     <a href="rechtlicher-hinweis.html">Rechtlicher Hinweis</a>
     <a href="kontakt.html">Kontakt</a>
+    <a href="#cookie-einstellungen" data-cookie-settings>Cookie-Einstellungen</a>
   </div>
   <div class="footer-copy">spanishwealthmodel.com</div>
 </footer>

@@ -63,11 +63,6 @@ const elements = {
 function trackAnalyticsEvent(eventName, parameters = {}) {
   if (typeof window.swmTrackEvent === 'function') {
     window.swmTrackEvent(eventName, parameters);
-    return;
-  }
-
-  if (typeof window.gtag === 'function') {
-    window.gtag('event', eventName, parameters);
   }
 }
 
@@ -389,11 +384,6 @@ function attachEvents() {
       elements.maintenanceValue.value = state.maintenanceValue;
       updateMaintenanceModeUI();
       trackCalculatorStarted();
-      trackAnalyticsEvent('scenario_changed', {
-        calculator: 'cashflow',
-        scenario_type: 'maintenance_mode',
-        mode: newMode,
-      });
       recalculate();
       trackCalculatorCompleted();
     });
@@ -402,9 +392,6 @@ function attachEvents() {
   elements.resetButton.addEventListener('click', () => {
     Object.assign(state, defaults);
     fillInputs();
-    trackAnalyticsEvent('calculator_reset', {
-      calculator: 'cashflow',
-    });
     recalculate();
   });
 }
