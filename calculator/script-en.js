@@ -132,7 +132,7 @@ function getAssessment(roe) {
     };
   }
   return {
-    badge: '🔥 Strong investment',
+    badge: 'Strong model result',
     range: 'ROE above 25%',
     tone: 'is-strong',
   };
@@ -144,11 +144,11 @@ function getInterpretation(roe, freeCashFlow) {
   }
 
   if (roe < 10) {
-    return 'The property is self-supporting, but the return is below the target range. Review purchase price, financing, or rental assumptions.';
+    return 'The property covers the modeled costs, but the return is below the target range. Review purchase price, financing, or rental assumptions.';
   }
 
   if (roe < 15) {
-    return 'Solid base case. Optimization potential exists in purchase price, financing, or rental income.';
+    return 'Solid model result. Optimization potential exists in purchase price, financing, or rental income.';
   }
 
   if (roe <= 25) {
@@ -191,7 +191,7 @@ function getAssessmentNote(roe, freeCashFlow) {
   if (roe < 15) {
     return `
       <p>This is a conservative pre-screening.</p>
-      <p>The property is self-supporting and offers a solid base case, but there is still room for improvement.</p>
+      <p>The modeled scenario covers its costs and shows a solid base case, but there is still room for improvement.</p>
       <p>Improvements are typically possible through:</p>
       <ul>
         <li>better purchase price</li>
