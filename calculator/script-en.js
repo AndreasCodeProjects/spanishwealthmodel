@@ -14,6 +14,12 @@ const defaults = {
 
 const state = { ...defaults };
 
+const analyticsState = {
+  calculatorStarted: false,
+  calculatorCompleted: false,
+  resultViewed: false,
+};
+
 const elements = {
   purchasePrice: document.getElementById('purchasePrice'),
   closingCostsPercent: document.getElementById('closingCostsPercent'),
@@ -53,6 +59,63 @@ const elements = {
   summaryInsight: document.getElementById('summaryInsight'),
   assessmentNote: document.getElementById('assessmentNote'),
 };
+
+function trackAnalyticsEvent(eventName, parameters = {}) {
+  if (typeof window.swmTrackEvent === 'function') {
+    window.swmTrackEvent(eventName, parameters);
+    return;
+  }
+
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', eventName, parameters);
+  }
+}
+
+function trackCalculatorStarted() {
+  if (analyticsState.calculatorStarted) return;
+  analyticsState.calculatorStarted = true;
+  trackAnalyticsEvent('calculator_started', {
+    calculator: 'cashflow',
+  });
+}
+
+function hasEnoughDataForResult() {
+  return [
+    elements.purchasePrice,
+    elements.monthlyRent,
+    elements.equity,
+    elements.interestRate,
+    elements.loanTerm,
+  ].every((input) => input.value !== '' && Number.isFinite(Number.parseFloat(input.value)));
+}
+
+function trackCalculatorCompleted() {
+  if (analyticsState.calculatorCompleted || !analyticsState.calculatorStarted || !hasEnoughDataForResult()) return;
+  analyticsState.calculatorCompleted = true;
+  trackAnalyticsEvent('calculator_completed', {
+    calculator: 'cashflow',
+  });
+}
+
+function observeResultVisibility() {
+  const resultsPanel = document.querySelector('.panel-results');
+  if (!resultsPanel || !('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    if (analyticsState.resultViewed) return;
+
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      analyticsState.resultViewed = true;
+      trackAnalyticsEvent('result_viewed', {
+        calculator: 'cashflow',
+      });
+      observer.disconnect();
+    });
+  }, { threshold: 0.35 });
+
+  observer.observe(resultsPanel);
+}
 
 function clamp(value, min, max = Infinity) {
   return Math.min(Math.max(value, min), max);
@@ -310,7 +373,11 @@ function attachEvents() {
     elements.otherCosts,
     elements.appreciationRate,
   ].forEach((input) => {
-    input.addEventListener('input', recalculate);
+    input.addEventListener('input', () => {
+      trackCalculatorStarted();
+      recalculate();
+      trackCalculatorCompleted();
+    });
   });
 
   elements.maintenanceToggleButtons.forEach((button) => {
@@ -321,13 +388,23 @@ function attachEvents() {
       state.maintenanceValue = newMode === 'percent' ? defaults.maintenanceValue : Math.round(defaults.purchasePrice * (defaults.maintenanceValue / 100));
       elements.maintenanceValue.value = state.maintenanceValue;
       updateMaintenanceModeUI();
+      trackCalculatorStarted();
+      trackAnalyticsEvent('scenario_changed', {
+        calculator: 'cashflow',
+        scenario_type: 'maintenance_mode',
+        mode: newMode,
+      });
       recalculate();
+      trackCalculatorCompleted();
     });
   });
 
   elements.resetButton.addEventListener('click', () => {
     Object.assign(state, defaults);
     fillInputs();
+    trackAnalyticsEvent('calculator_reset', {
+      calculator: 'cashflow',
+    });
     recalculate();
   });
 }
@@ -335,3 +412,4 @@ function attachEvents() {
 fillInputs();
 attachEvents();
 recalculate();
+observeResultVisibility();
