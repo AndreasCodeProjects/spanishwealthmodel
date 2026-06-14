@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO: Anpassen -->
+  <title>SEITENTITEL – Untertitel</title>
+  <meta name="description" content="SEO-Beschreibung (ca. 155 Zeichen)">
+  <meta name="keywords" content="keyword1, keyword2, keyword3">
+  <meta property="og:title"       content="OG-Titel">
+  <meta property="og:description" content="OG-Beschreibung">
+  <meta property="og:type"        content="website">
+  <link rel="canonical" href="https://www.DEINE-DOMAIN.com">
+
+  <!-- Fonts (Pflicht) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Design System -->
+  <link rel="stylesheet" href="swm-design.css">
+</head>
+<body>
+
+
+<!-- ============================================================
+     NAVIGATION
+     Klassen: nav · nav-brand · nav-links · btn-nav
+     ============================================================ -->
+<nav>
+  <div class="nav-brand">Markenname <span>Akzentwort</span></div>
+  <div class="nav-links">
+    <a href="#about">Link 1</a>
+    <a href="#phases">Link 2</a>
+    <a href="#author">Link 3</a>
+    <a href="#purchase" class="btn-nav">CTA-Button</a>
+  </div>
+</nav>
+
+
+<!-- ============================================================
+     HERO
+     Klassen: hero · hero-eyebrow · eyebrow-line · eyebrow-text
+              gold-title · hero-ornament · ornament-line · ornament-diamond
+              hero-lead · hero-ctas · btn-primary · btn-ghost
+              hero-badges · hero-badge · badge-dot
+              cover-wrap · css-book (Buchcover-Illustration)
+     ============================================================ -->
+<div style="background:var(--cream);">
+<div class="hero">
+
+  <!-- Linke Spalte: Text -->
+  <div>
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Kurzer Kontext-Satz</span>
+    </div>
+
+    <h1>
+      Hauptzeile<br>
+      <span class="gold-title">Gold-Akzent-Zeile</span>
+    </h1>
+
+    <!-- Zierornament -->
+    <div class="hero-ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-line"></div>
+    </div>
+
+    <p class="hero-lead">
+      Einleitungstext — max. 2–3 Sätze, Kernversprechen des Produkts.
+    </p>
+
+    <!-- Buttons -->
+    <div class="hero-ctas">
+      <a href="#purchase" class="btn-primary">Primärer CTA</a>
+      <a href="#phases"   class="btn-ghost">Sekundärer Link →</a>
+    </div>
+
+    <!-- Vertrauens-Badges -->
+    <div class="hero-badges">
+      <div class="hero-badge"><div class="badge-dot"></div>Vertrauenspunkt 1</div>
+      <div class="hero-badge"><div class="badge-dot"></div>Vertrauenspunkt 2</div>
+      <div class="hero-badge"><div class="badge-dot"></div>Vertrauenspunkt 3</div>
+    </div>
+  </div>
+
+  <!-- Rechte Spalte: CSS-Buchcover -->
+  <div class="cover-wrap">
+    <div class="css-book">
+      <div class="css-book-spine"></div>
+      <div class="css-book-face">
+        <div class="cb-top">
+          <div class="cb-rule-wrap"><div class="cb-rule"></div><div class="cb-rule"></div></div>
+          <div class="cb-das">DAS</div>         <!-- Zeile über dem Titel -->
+        </div>
+        <div class="cb-title1">SPANISCHE</div>       <!-- Zeile 1 Titel (Navy) -->
+        <div class="cb-title2">VERMÖGENS-<br>MODELL</div> <!-- Zeile 2 Titel (Gold) -->
+        <div class="cb-diamond-row"><div class="cb-hr"></div><div class="cb-dia"></div><div class="cb-hr"></div></div>
+        <div class="cb-sub">Untertitel des Buchs<br>zweite Zeile</div>
+        <div class="cb-scene">  <!-- Abstrakte Landschaft — CSS only -->
+          <div class="cb-sky"></div>
+          <div class="cb-hills"></div>
+          <div class="cb-city"></div>
+          <div class="cb-building"></div>
+          <div class="cb-terrace"></div>
+          <div class="cb-palm"></div>
+        </div>
+        <div class="cb-footer">
+          <div class="cb-tags">
+            <span>Keyword 1</span><span>Keyword 2</span><span>Keyword 3</span>
+          </div>
+          <div class="cb-author-row"><div class="cb-hr-s"></div><div class="cb-dia-s"></div><div class="cb-hr-s"></div></div>
+          <div class="cb-author">AUTOR NAME</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Alternativ: echtes Cover-Bild statt CSS-Illustration:
+  <div class="cover-wrap">
+    <img src="cover.png" alt="Buchcover" style="width:260px; border-radius:var(--r-lg);
+      box-shadow: 12px 20px 60px rgba(26,43,64,0.22);
+      transform: perspective(800px) rotateY(-5deg) rotate(-1deg);
+      transition: transform 0.4s;">
+  </div>
+  -->
+
+</div>
+</div>
+
+
+<!-- ============================================================
+     SECTION: FÜR WEN / ÜBER DAS BUCH  (strip-deep = creme-tief)
+     Klassen: strip-deep · section-wrap · forwhom-grid
+              section-label · section-label-line · section-label-text
+              section-title · title-orn · section-lead
+              check-list · chk · not-label · not-list · not-x
+              blockquote
+     ============================================================ -->
+<div class="strip-deep" id="about">
+<div class="section-wrap">
+  <div class="forwhom-grid">
+
+    <!-- Linke Spalte -->
+    <div>
+      <div class="section-label">
+        <div class="section-label-line"></div>
+        <span class="section-label-text">Abschnitts-Label</span>
+      </div>
+      <h2 class="section-title">Abschnittsüberschrift<br><em>mit Gold-Akzent</em></h2>
+      <div class="title-orn">
+        <div class="title-orn-line"></div>
+        <div class="title-orn-d"></div>
+        <div class="title-orn-line"></div>
+      </div>
+      <p class="section-lead">Einleitungsabsatz des Abschnitts — max. 3 Sätze.</p>
+
+      <!-- Checkliste -->
+      <ul class="check-list">
+        <li><span class="chk">◆</span><span>Punkt 1 — Beschreibung</span></li>
+        <li><span class="chk">◆</span><span>Punkt 2 — Beschreibung</span></li>
+        <li><span class="chk">◆</span><span>Punkt 3 — Beschreibung</span></li>
+      </ul>
+
+      <!-- Nicht-für-Liste (optional) -->
+      <div class="not-label">Das ist nichts für dich, wenn</div>
+      <ul class="not-list">
+        <li><span class="not-x">×</span>Ausschluss 1</li>
+        <li><span class="not-x">×</span>Ausschluss 2</li>
+      </ul>
+    </div>
+
+    <!-- Rechte Spalte -->
+    <div>
+      <div class="section-label">
+        <div class="section-label-line"></div>
+        <span class="section-label-text">Zweites Label</span>
+      </div>
+      <h2 class="section-title">Zweite Überschrift</h2>
+      <div class="title-orn">
+        <div class="title-orn-line"></div>
+        <div class="title-orn-d"></div>
+        <div class="title-orn-line"></div>
+      </div>
+      <p style="font-size:0.96rem; color:var(--text-body); line-height:1.82; font-weight:400; margin-bottom:1.1rem;">
+        Fließtext Absatz 1.
+      </p>
+      <blockquote>„Zitat des Autors oder ein prägnanter Satz."</blockquote>
+      <p style="font-size:0.96rem; color:var(--text-body); line-height:1.82; font-weight:400;">
+        Fließtext Absatz 2.
+      </p>
+    </div>
+
+  </div>
+</div>
+</div>
+
+
+<!-- ============================================================
+     SECTION: PHASEN / SCHRITTE  (strip-navy = dunkelblau)
+     Klassen: strip-navy · phases-inner · phases-grid · phase-card
+              phase-num · phase-tag · phase-name · phase-text
+     ============================================================ -->
+<div class="strip-navy" id="phases">
+<div class="phases-inner">
+  <div class="section-label">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Das System</span>
+  </div>
+  <h2 class="section-title">Überschrift auf Navy-Hintergrund</h2>
+  <p class="section-lead">Einleitungstext in hellem Grau-Blau.</p>
+
+  <div class="phases-grid">
+    <!-- Phase 0 -->
+    <div class="phase-card">
+      <div class="phase-num">0</div>
+      <div class="phase-tag">Phase-Label</div>
+      <div class="phase-name">Phasentitel</div>
+      <p class="phase-text">Beschreibungstext der Phase, 2–4 Sätze.</p>
+    </div>
+    <!-- Phase 1 -->
+    <div class="phase-card">
+      <div class="phase-num">1</div>
+      <div class="phase-tag">Phase-Label</div>
+      <div class="phase-name">Phasentitel</div>
+      <p class="phase-text">Beschreibungstext der Phase.</p>
+    </div>
+    <!-- Phase 2 -->
+    <div class="phase-card">
+      <div class="phase-num">2</div>
+      <div class="phase-tag">Phase-Label</div>
+      <div class="phase-name">Phasentitel</div>
+      <p class="phase-text">Beschreibungstext der Phase.</p>
+    </div>
+    <!-- Phase 3 -->
+    <div class="phase-card">
+      <div class="phase-num">3</div>
+      <div class="phase-tag">Phase-Label</div>
+      <div class="phase-name">Phasentitel</div>
+      <p class="phase-text">Beschreibungstext der Phase.</p>
+    </div>
+    <!-- Phase 4 -->
+    <div class="phase-card">
+      <div class="phase-num">4</div>
+      <div class="phase-tag">Phase-Label</div>
+      <div class="phase-name">Phasentitel</div>
+      <p class="phase-text">Beschreibungstext der Phase.</p>
+    </div>
+    <!-- Phase 5 -->
+    <div class="phase-card">
+      <div class="phase-num">5</div>
+      <div class="phase-tag">Phase-Label</div>
+      <div class="phase-name">Phasentitel</div>
+      <p class="phase-text">Beschreibungstext der Phase.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ============================================================
+     SECTION: OUTCOMES / LEISTUNGEN  (strip-cream = weiß-creme)
+     Klassen: strip-cream · section-wrap · outcomes-grid
+              outcome-card · outcome-ico · outcome-title · outcome-desc
+     ============================================================ -->
+<div class="strip-cream" id="learn">
+<div class="section-wrap">
+  <div class="section-label">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Was du mitnimmst</span>
+  </div>
+  <h2 class="section-title">Überschrift</h2>
+  <div class="title-orn">
+    <div class="title-orn-line"></div>
+    <div class="title-orn-d"></div>
+    <div class="title-orn-line"></div>
+  </div>
+  <p class="section-lead">Einleitungstext.</p>
+
+  <div class="outcomes-grid">
+    <!-- Karte 1 -->
+    <div class="outcome-card">
+      <div class="outcome-ico">◆</div>
+      <div>
+        <div class="outcome-title">Kartentitel</div>
+        <p class="outcome-desc">Kartentext — 2–3 Sätze.</p>
+      </div>
+    </div>
+    <!-- Karte 2 -->
+    <div class="outcome-card">
+      <div class="outcome-ico">◆</div>
+      <div>
+        <div class="outcome-title">Kartentitel</div>
+        <p class="outcome-desc">Kartentext.</p>
+      </div>
+    </div>
+    <!-- Karte 3 -->
+    <div class="outcome-card">
+      <div class="outcome-ico">◆</div>
+      <div>
+        <div class="outcome-title">Kartentitel</div>
+        <p class="outcome-desc">Kartentext.</p>
+      </div>
+    </div>
+    <!-- Karte 4 -->
+    <div class="outcome-card">
+      <div class="outcome-ico">◆</div>
+      <div>
+        <div class="outcome-title">Kartentitel</div>
+        <p class="outcome-desc">Kartentext.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ============================================================
+     SECTION: AUTOR  (strip-deep)
+     Klassen: strip-deep · section-wrap · author-grid · author-card
+              author-monogram · author-name · author-role
+              author-facts · author-fact · author-body
+     ============================================================ -->
+<div class="strip-deep" id="author">
+<div class="section-wrap">
+  <div class="author-grid">
+
+    <!-- Autor-Karte (dunkelblau) -->
+    <div>
+      <div class="author-card">
+        <div class="author-monogram">AS</div>  <!-- Initialen -->
+        <div class="author-name">Autor Name</div>
+        <div class="author-role">Berufsbezeichnung · Ort, seit Jahr</div>
+        <div class="author-facts">
+          <div class="author-fact">Steckbrief-Fakt 1</div>
+          <div class="author-fact">Steckbrief-Fakt 2</div>
+          <div class="author-fact">Steckbrief-Fakt 3</div>
+          <div class="author-fact">Steckbrief-Fakt 4</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Autor-Text -->
+    <div class="author-body">
+      <div class="section-label">
+        <div class="section-label-line"></div>
+        <span class="section-label-text">Über den Autor</span>
+      </div>
+      <h2 class="section-title">Überschrift</h2>
+      <div class="title-orn">
+        <div class="title-orn-line"></div>
+        <div class="title-orn-d"></div>
+        <div class="title-orn-line"></div>
+      </div>
+      <p>Absatz 1.</p>
+      <p>Absatz 2.</p>
+      <p>Absatz 3.</p>
+    </div>
+
+  </div>
+</div>
+</div>
+
+
+<!-- ============================================================
+     SECTION: RECHNER / TOOL  (strip-cream)
+     Klassen: strip-cream · calc-inner · calc-table · calc-header
+              calc-row · calc-lbl · calc-val · calc-val.pos
+     ============================================================ -->
+<div class="strip-cream" id="calculator">
+<div class="calc-inner">
+  <div class="section-label" style="justify-content:center;">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Tool-Label</span>
+    <div class="section-label-line"></div>
+  </div>
+  <h2 class="section-title" style="text-align:center;">Tool-Überschrift</h2>
+  <div class="title-orn" style="justify-content:center;">
+    <div class="title-orn-line"></div>
+    <div class="title-orn-d"></div>
+    <div class="title-orn-line"></div>
+  </div>
+  <p class="section-lead" style="text-align:center; margin:0 auto 2.5rem;">Beschreibungstext.</p>
+
+  <div class="calc-table">
+    <div class="calc-header">Tabellenüberschrift / Beispielrechnung</div>
+    <div class="calc-row"><span class="calc-lbl">Kennzahl 1</span><span class="calc-val">0,00 €</span></div>
+    <div class="calc-row"><span class="calc-lbl">Kennzahl 2</span><span class="calc-val">0,00 €</span></div>
+    <div class="calc-row"><span class="calc-lbl">Ergebnis (hervorgehoben)</span><span class="calc-val pos">+ 0,00 €</span></div>
+  </div>
+
+  <a href="#" class="btn-primary">CTA-Button</a>
+  <p style="font-size:0.78rem; color:var(--text-body); margin-top:1rem; font-weight:400;">Hinweistext unter dem Button.</p>
+</div>
+</div>
+
+
+<!-- ============================================================
+     SECTION: KAUF / PREIS  (strip-deep)
+     Klassen: strip-deep · purchase-inner · price-card · price-ornament
+              po-line · po-d · price-amount · price-desc
+              includes-title · includes-list · inc-ck · btn-buy · pay-note
+     ============================================================ -->
+<div class="strip-deep" id="purchase">
+<div class="purchase-inner">
+  <div class="section-label" style="justify-content:center;">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Kaufen</span>
+    <div class="section-label-line"></div>
+  </div>
+  <h2 class="section-title" style="text-align:center;">Jetzt erhältlich.</h2>
+  <div class="title-orn" style="justify-content:center;">
+    <div class="title-orn-line"></div>
+    <div class="title-orn-d"></div>
+    <div class="title-orn-line"></div>
+  </div>
+  <p class="section-lead" style="text-align:center; margin:0 auto 2.5rem;">Kauf-Beschreibungstext.</p>
+
+  <div class="price-card">
+    <div class="price-ornament">
+      <div class="po-line"></div>
+      <div class="po-d"></div>
+      <div class="po-line"></div>
+    </div>
+    <div class="price-amount">€ 00</div>
+    <div class="price-desc">Einmalige Zahlung · Digitales Produkt · Sofortzugang</div>
+    <div class="includes-title">Im Lieferumfang enthalten</div>
+    <ul class="includes-list">
+      <li><span class="inc-ck">◆</span>Leistung 1</li>
+      <li><span class="inc-ck">◆</span>Leistung 2</li>
+      <li><span class="inc-ck">◆</span>Leistung 3</li>
+    </ul>
+    <a href="KAUF-LINK" class="btn-buy">Kaufen →</a>
+    <p class="pay-note">Zahlung über Anbieter · Sicherer Checkout</p>
+  </div>
+</div>
+</div>
+
+
+<!-- ============================================================
+     SECTION: FAQ  (strip-cream)
+     Klassen: strip-cream · faq-inner · faq-list · faq-item · faq-q · faq-a
+     ============================================================ -->
+<div class="strip-cream" id="faq">
+<div class="faq-inner">
+  <div class="section-label" style="justify-content:center;">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">FAQ</span>
+    <div class="section-label-line"></div>
+  </div>
+  <h2 class="section-title" style="text-align:center;">Häufige Fragen</h2>
+  <div class="title-orn" style="justify-content:center;">
+    <div class="title-orn-line"></div>
+    <div class="title-orn-d"></div>
+    <div class="title-orn-line"></div>
+  </div>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">Frage 1?</div>
+      <p class="faq-a">Antwort 1.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Frage 2?</div>
+      <p class="faq-a">Antwort 2.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Frage 3?</div>
+      <p class="faq-a">Antwort 3.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ============================================================
+     NOTICE BAR
+     ============================================================ -->
+<div class="notice-bar">
+  <p><strong>Rechtlicher Hinweis:</strong> Hinweistext. Keine Beratung. Keine Haftung.</p>
+</div>
+
+
+<!-- ============================================================
+     FOOTER
+     Klassen: footer · footer-brand · footer-links · footer-copy
+     ============================================================ -->
+<footer>
+  <div class="footer-brand">© 2026 Markenname</div>
+  <div class="footer-links">
+    <a href="#">Impressum</a>
+    <a href="#">Datenschutz</a>
+    <a href="#">Rechtlicher Hinweis</a>
+    <a href="mailto:email@domain.com">Kontakt</a>
+  </div>
+  <div class="footer-copy">www.domain.com</div>
+</footer>
+
+
+</body>
+</html>
