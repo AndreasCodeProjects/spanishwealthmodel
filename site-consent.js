@@ -61,7 +61,7 @@
     }
 
     if (!isConfiguredMeasurementId(GA_MEASUREMENT_ID)) {
-      console.warn('GA4 measurement ID is not configured correctly in analytics.js.');
+      console.warn('GA4 measurement ID is not configured correctly in site-consent.js.');
       return;
     }
 
@@ -172,6 +172,18 @@
 
   function getPrivacyHref() {
     return window.location.pathname.includes('/calculator/') ? '../datenschutz.html' : 'datenschutz.html';
+  }
+
+  function ensureCookieSettingsLinks() {
+    document.querySelectorAll('.footer-links').forEach((footerLinks) => {
+      if (footerLinks.querySelector('[data-cookie-settings]')) return;
+
+      const link = document.createElement('a');
+      link.href = '#cookie-einstellungen';
+      link.dataset.cookieSettings = '';
+      link.textContent = 'Cookie-Einstellungen';
+      footerLinks.appendChild(link);
+    });
   }
 
   function ensureConsentStyles() {
@@ -335,11 +347,18 @@
   window.swmTrackEvent = trackEvent;
   window.swmOpenCookieSettings = showConsentBanner;
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function initConsentSetup() {
+    ensureCookieSettingsLinks();
     preserveUtmParamsOnInternalLinks();
     attachCookieSettingsLinks();
     attachClickTracking();
     applyStoredConsent();
     trackThankYouPage();
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initConsentSetup, { once: true });
+  } else {
+    initConsentSetup();
+  }
 })();
