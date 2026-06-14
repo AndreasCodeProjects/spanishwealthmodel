@@ -115,8 +115,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .hero {
-  max-width: 780px;
-  margin-bottom: 2rem;
+  max-width: none;
+  margin: 0 0 2rem;
+  text-align: left;
 }
 
 .eyebrow {
@@ -153,14 +154,14 @@ a { color: inherit; text-decoration: none; }
 }
 
 .subtitle {
-  max-width: 720px;
+  max-width: none;
   margin: 1.2rem 0 0;
   font-size: 1rem;
   line-height: 1.85;
 }
 
 .book-reference {
-  max-width: 680px;
+  max-width: none;
   margin: 1rem 0 0;
   font-size: 0.92rem;
 }
@@ -168,7 +169,7 @@ a { color: inherit; text-decoration: none; }
 .book-reference-secondary { color: var(--stone); }
 
 .tool-note {
-  max-width: 720px;
+  max-width: none;
   margin: 0 0 2.2rem;
   padding: 1rem 1.2rem;
   background: var(--cream-deep);
@@ -556,10 +557,9 @@ a { color: inherit; text-decoration: none; }
 body > .site-footer {
   background: var(--navy) !important;
   padding: 2.5rem 5vw;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
   gap: 1rem;
   text-align: left;
   border-top: 0;
@@ -586,6 +586,7 @@ body > .site-footer .footer-links a {
 }
 body > .site-footer .footer-links a:hover { color: var(--gold-light); }
 body > .site-footer .footer-copy { font-size: 0.76rem; color: #A8B8C4; }
+body > .site-footer .footer-copy { justify-self: end; }
 
 @media (max-width: 980px) {
   .site-nav { gap: 1.2rem; }
@@ -601,6 +602,16 @@ body > .site-footer .footer-copy { font-size: 0.76rem; color: #A8B8C4; }
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 0.9rem 1.1rem;
+  }
+  body > .site-footer {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+  body > .site-footer .footer-links {
+    justify-content: flex-start;
+  }
+  body > .site-footer .footer-copy {
+    justify-self: start;
   }
   .panel { padding: 1.25rem; }
   .panel-header,
