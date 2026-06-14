@@ -21,6 +21,7 @@
   <!-- Design System -->
   <link rel="stylesheet" href="swm-design.css">
   <script src="site-consent.js" defer></script>
+  <script src="nav-menu.js" defer></script>
 </head>
 <body>
 
@@ -31,7 +32,10 @@
      ============================================================ -->
 <nav>
   <div class="nav-brand">Markenname <span>Akzentwort</span></div>
-  <div class="nav-links">
+  <button class="nav-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="primary-navigation">
+    <span class="nav-toggle-lines" aria-hidden="true"></span>
+  </button>
+  <div class="nav-links" id="primary-navigation">
     <a href="#about">Link 1</a>
     <a href="#phases">Link 2</a>
     <a href="#author">Link 3</a>

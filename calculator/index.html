@@ -11,13 +11,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css?v=footer-main-20260614" />
   <script src="../site-consent.js" defer></script>
+  <script src="../nav-menu.js" defer></script>
 </head>
 
 <body>
   <header class="site-header">
     <div class="nav-wrap">
       <a class="brand" href="../">The Spanish <span>Wealth Model</span></a>
-      <nav class="site-nav" aria-label="Primary navigation">
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="nav-toggle-lines" aria-hidden="true"></span>
+      </button>
+      <nav class="site-nav" id="primary-navigation" aria-label="Primary navigation">
         <a href="../#about">The Book</a>
         <a href="../#phases">The System</a>
         <a href="../#author">Author</a>
