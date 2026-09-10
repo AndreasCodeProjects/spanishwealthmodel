@@ -3,8 +3,8 @@
   --cream-deep: #EFE6D8;
   --gold: #B8943A;
   --gold-light: #D4AA55;
-  --navy: #1A2B40;
-  --navy-mid: #243650;
+  --navy: #142639;
+  --navy-mid: #1E3450;
   --ink: #2A2018;
   --stone: #5A4E42;
   --border: #DDD3C4;
@@ -13,12 +13,12 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 18px; }
 body {
   font-family: 'Jost', system-ui, sans-serif;
   background: var(--cream);
   color: var(--ink);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
@@ -59,7 +59,7 @@ nav {
 .nav-back:hover { color: var(--gold); border-color: var(--gold); }
 
 main {
-  max-width: 880px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 86px 5vw 80px;
 }

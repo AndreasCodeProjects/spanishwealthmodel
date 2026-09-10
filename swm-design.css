@@ -37,9 +37,9 @@
   --gold-light:  #D4AA55;   /* lighter gold for dark backgrounds */
 
   /* Primary — Navy */
-  --navy:        #1A2B40;   /* headings, buttons, footer bg */
-  --navy-mid:    #243650;   /* hover state */
-  --navy-light:  #3A526A;   /* secondary navy text */
+  --navy:        #142639;   /* headings, buttons, footer bg */
+  --navy-mid:    #1E3450;   /* hover state */
+  --navy-light:  #35506B;   /* secondary navy text */
 
   /* Text */
   --ink:         #2A2018;   /* primary body text */

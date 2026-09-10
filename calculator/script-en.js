@@ -1,6 +1,7 @@
 const defaults = {
   purchasePrice: 143000,
-  closingCostsPercent: 12,
+  itpPercent: 10,
+  ancillaryPercent: 2,
   monthlyRent: 1000,
   vacancyMonths: 1,
   equity: 60060,
@@ -22,7 +23,8 @@ const analyticsState = {
 
 const elements = {
   purchasePrice: document.getElementById('purchasePrice'),
-  closingCostsPercent: document.getElementById('closingCostsPercent'),
+  itpPercent: document.getElementById('itpPercent'),
+  ancillaryPercent: document.getElementById('ancillaryPercent'),
   monthlyRent: document.getElementById('monthlyRent'),
   vacancyMonths: document.getElementById('vacancyMonths'),
   equity: document.getElementById('equity'),
@@ -35,6 +37,8 @@ const elements = {
   maintenanceToggleButtons: document.querySelectorAll('[data-maintenance-mode]'),
   equityHint: document.getElementById('equityHint'),
   resetButton: document.getElementById('resetButton'),
+  resultTransferTax: document.getElementById('resultTransferTax'),
+  resultAncillaryCosts: document.getElementById('resultAncillaryCosts'),
   resultClosingCosts: document.getElementById('resultClosingCosts'),
   resultTotalInvestment: document.getElementById('resultTotalInvestment'),
   resultLoanAmount: document.getElementById('resultLoanAmount'),
@@ -133,17 +137,33 @@ function formatPercent(value) {
   return `${value.toFixed(1)}%`;
 }
 
+// Alle Eingabefelder, die aus `state` befuellt und ueberwacht werden.
+const INPUT_KEYS = [
+  'purchasePrice',
+  'itpPercent',
+  'ancillaryPercent',
+  'monthlyRent',
+  'vacancyMonths',
+  'equity',
+  'interestRate',
+  'loanTerm',
+  'maintenanceValue',
+  'otherCosts',
+  'appreciationRate',
+];
+
+// Fehlt ein Element (z. B. weil ein Browser eine veraltete Skriptversion aus dem
+// Cache mit neuem HTML kombiniert), darf das nicht das gesamte Formular lahmlegen:
+// die uebrigen Felder werden weiterhin befuellt.
 function fillInputs() {
-  elements.purchasePrice.value = state.purchasePrice;
-  elements.closingCostsPercent.value = state.closingCostsPercent;
-  elements.monthlyRent.value = state.monthlyRent;
-  elements.vacancyMonths.value = state.vacancyMonths;
-  elements.equity.value = state.equity;
-  elements.interestRate.value = state.interestRate;
-  elements.loanTerm.value = state.loanTerm;
-  elements.maintenanceValue.value = state.maintenanceValue;
-  elements.otherCosts.value = state.otherCosts;
-  elements.appreciationRate.value = state.appreciationRate;
+  INPUT_KEYS.forEach((key) => {
+    const el = elements[key];
+    if (!el) {
+      console.warn(`[calculator] Eingabefeld "${key}" nicht gefunden - uebersprungen.`);
+      return;
+    }
+    el.value = state[key];
+  });
   updateMaintenanceModeUI();
 }
 
@@ -289,7 +309,8 @@ function getAssessmentNote(roe, freeCashFlow) {
 
 function recalculate() {
   state.purchasePrice = clamp(readNumber(elements.purchasePrice, defaults.purchasePrice), 0);
-  state.closingCostsPercent = clamp(readNumber(elements.closingCostsPercent, defaults.closingCostsPercent), 0);
+  state.itpPercent = clamp(readNumber(elements.itpPercent, defaults.itpPercent), 0);
+  state.ancillaryPercent = clamp(readNumber(elements.ancillaryPercent, defaults.ancillaryPercent), 0);
   state.monthlyRent = clamp(readNumber(elements.monthlyRent, defaults.monthlyRent), 0);
   state.vacancyMonths = clamp(readNumber(elements.vacancyMonths, defaults.vacancyMonths), 0, 12);
   state.equity = clamp(readNumber(elements.equity, defaults.equity), 0);
@@ -299,7 +320,9 @@ function recalculate() {
   state.otherCosts = clamp(readNumber(elements.otherCosts, defaults.otherCosts), 0);
   state.appreciationRate = clamp(readNumber(elements.appreciationRate, defaults.appreciationRate), 0);
 
-  const closingCosts = state.purchasePrice * (state.closingCostsPercent / 100);
+  const transferTax = state.purchasePrice * (state.itpPercent / 100);
+  const ancillaryCosts = state.purchasePrice * (state.ancillaryPercent / 100);
+  const closingCosts = transferTax + ancillaryCosts;
   const totalInvestment = state.purchasePrice + closingCosts;
   const rawLoanAmount = totalInvestment - state.equity;
   const loanAmount = Math.max(rawLoanAmount, 0);
@@ -327,6 +350,8 @@ function recalculate() {
       ? 'Equity exceeds total investment. Loan Amount is therefore set to €0 and LTV to 0.0%.'
       : '';
 
+  elements.resultTransferTax.textContent = formatCurrency(transferTax);
+  elements.resultAncillaryCosts.textContent = formatCurrency(ancillaryCosts);
   elements.resultClosingCosts.textContent = formatCurrency(closingCosts);
   elements.resultTotalInvestment.textContent = formatCurrency(totalInvestment);
   elements.resultLoanAmount.textContent = formatCurrency(loanAmount);
@@ -356,18 +381,7 @@ function recalculate() {
 }
 
 function attachEvents() {
-  [
-    elements.purchasePrice,
-    elements.closingCostsPercent,
-    elements.monthlyRent,
-    elements.vacancyMonths,
-    elements.equity,
-    elements.interestRate,
-    elements.loanTerm,
-    elements.maintenanceValue,
-    elements.otherCosts,
-    elements.appreciationRate,
-  ].forEach((input) => {
+  INPUT_KEYS.map((key) => elements[key]).filter(Boolean).forEach((input) => {
     input.addEventListener('input', () => {
       trackCalculatorStarted();
       recalculate();

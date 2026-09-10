@@ -15,16 +15,16 @@
   <meta property="og:description" content="Free cash flow calculator for Spanish real estate. Model purchase price, financing, rent, reserves, and return on equity.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://spanishwealthmodel.com/calculator/">
-  <meta property="og:image" content="https://spanishwealthmodel.com/spanish_wealth_model.png">
+  <meta property="og:image" content="https://spanishwealthmodel.com/cover_front.png">
   <meta property="og:image:alt" content="Cover of The Spanish Wealth Model">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cashflow Calculator for Spanish Real Estate">
   <meta name="twitter:description" content="Free cash flow calculator for conservative pre-screening of Spanish real estate investments.">
-  <meta name="twitter:image" content="https://spanishwealthmodel.com/spanish_wealth_model.png">
+  <meta name="twitter:image" content="https://spanishwealthmodel.com/cover_front.png">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=footer-main-20260614" />
+  <link rel="stylesheet" href="style.css?v=20260910-itp" />
   <script src="../site-consent.js" defer></script>
   <script src="../nav-menu.js" defer></script>
 </head>
@@ -83,8 +83,12 @@
               <input id="purchasePrice" type="number" min="0" step="1000" />
             </label>
             <label class="field">
-              <span>Closing Costs (%)</span>
-              <input id="closingCostsPercent" type="number" min="0" step="0.1" />
+              <span>Transfer Tax / ITP (%) <a class="fn" href="#cost-notes">*</a></span>
+              <input id="itpPercent" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field">
+              <span>Ancillary Costs (%) <a class="fn" href="#cost-notes">**</a></span>
+              <input id="ancillaryPercent" type="number" min="0" step="0.1" />
             </label>
             <label class="field">
               <span>Monthly Rent (€)</span>
@@ -200,7 +204,15 @@
               <h3>Investment Overview</h3>
               <dl class="result-list">
                 <div>
-                  <dt>Closing Costs</dt>
+                  <dt>Transfer Tax (ITP)</dt>
+                  <dd id="resultTransferTax"></dd>
+                </div>
+                <div>
+                  <dt>Ancillary Costs</dt>
+                  <dd id="resultAncillaryCosts"></dd>
+                </div>
+                <div>
+                  <dt>Closing Costs <span class="inline-meta">— ITP plus ancillary</span></dt>
                   <dd id="resultClosingCosts"></dd>
                 </div>
                 <div>
@@ -290,6 +302,15 @@
       </section>
     </main>
 
+    <section class="cost-notes" id="cost-notes">
+      <p><span class="fn-mark">*</span> <strong>Transfer tax (ITP)</strong> is set by each autonomous community, so the
+        rate depends on where you buy. New builds are not subject to ITP at all — they are taxed with VAT (IVA) plus
+        stamp duty (AJD) instead. Check the current rate for your region and enter it here.</p>
+      <p><span class="fn-mark">**</span> <strong>Ancillary costs</strong> cover notary, land registry, gestoría, legal
+        advice and any agent fee payable by the buyer. Depending on the deal these typically come to somewhere between
+        2&nbsp;% and 6&nbsp;% of the purchase price.</p>
+    </section>
+
     <section class="contact-block">
       <p class="contact-kicker">Feedback or technical notes about the calculator?</p>
       <p><a href="../kontakt.html">Kontaktseite öffnen</a>
@@ -309,7 +330,7 @@
     <div class="footer-copy">spanishwealthmodel.com</div>
   </footer>
 
-  <script src="script-en.js"></script>
+  <script src="script-en.js?v=20260910-itp"></script>
 </body>
 
 </html>

@@ -153,7 +153,7 @@
 
     return (
       analyticsEvent === 'checkout_clicked' ||
-      /lemonsqueezy\.com|lemon\.squeezy|lemon-squeezy/i.test(href)
+      /tredition\.(com|de)|amazon\.[a-z.]{2,6}\/|amzn\.to/i.test(href)
     );
   }
 
@@ -263,7 +263,7 @@
     banner.setAttribute('aria-label', 'Cookie-Einstellungen');
     banner.hidden = true;
     banner.innerHTML = `
-      <p class="swm-consent-text">Wir nutzen Google Analytics, um zu verstehen, wie diese Webseite genutzt wird. Dabei messen wir Seitenaufrufe, Calculator-Nutzung und Klicks auf den Checkout. Es werden keine Calculator-Eingaben oder persoenlichen Inhalte erfasst.</p>
+      <p class="swm-consent-text">Wir nutzen Google Analytics, um zu verstehen, wie diese Webseite genutzt wird. Dabei messen wir Seitenaufrufe, Calculator-Nutzung und Klicks auf Bestelllinks zu externen Haendlern. Es werden keine Calculator-Eingaben oder persoenlichen Inhalte erfasst.</p>
       <div class="swm-consent-actions">
         <button class="swm-consent-button is-primary" type="button" data-consent-choice="granted">Akzeptieren</button>
         <button class="swm-consent-button is-secondary" type="button" data-consent-choice="denied">Ablehnen</button>

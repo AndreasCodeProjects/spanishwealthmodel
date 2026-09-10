@@ -5,9 +5,9 @@
   --gold: #B8943A;
   --gold-light: #D4AA55;
   --gold-pale: #F3ECD8;
-  --navy: #1A2B40;
-  --navy-mid: #243650;
-  --navy-light: #3A526A;
+  --navy: #142639;
+  --navy-mid: #1E3450;
+  --navy-light: #35506B;
   --ink: #2A2018;
   --text-body: #5A4E42;
   --stone: #7A6E60;
@@ -717,4 +717,34 @@ body > .site-footer .footer-copy { justify-self: end; }
   }
   .result-list div { grid-template-columns: 1fr; }
   .result-list dd { text-align: left; }
+}
+
+/* ── KOSTEN-FUSSNOTEN ── */
+.fn {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+.fn:hover { color: var(--navy); }
+.cost-notes {
+  max-width: 900px;
+  margin: 1.75rem auto 0;
+  padding: 1.3rem 1.6rem;
+  background: var(--cream-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+.cost-notes p {
+  margin: 0;
+  color: var(--text-body);
+  font-size: 0.9rem;
+  line-height: 1.8;
+  padding-left: 1.6rem;
+  text-indent: -1.6rem;
+}
+.cost-notes p + p { margin-top: 0.85rem; }
+.cost-notes strong { color: var(--navy); font-weight: 500; }
+.fn-mark { color: var(--gold); font-weight: 600; }
+@media (max-width: 640px) {
+  .cost-notes { padding: 1.1rem 1.15rem; }
 }
