@@ -126,7 +126,7 @@ function readNumber(input, fallback = 0) {
 }
 
 function formatCurrency(value) {
-  return new Intl.NumberFormat('en-IE', {
+  return new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0,
@@ -170,8 +170,8 @@ function fillInputs() {
 function updateMaintenanceModeUI() {
   const percentMode = state.maintenanceMode === 'percent';
   elements.maintenanceLabel.textContent = percentMode
-    ? 'Maintenance Reserve (% of Purchase Price)'
-    : 'Maintenance Reserve (€/year)';
+    ? 'Instandhaltungsrücklage (% vom Kaufpreis)'
+    : 'Instandhaltungsrücklage (€/Jahr)';
   elements.maintenanceValue.step = percentMode ? '0.1' : '50';
 
   elements.maintenanceToggleButtons.forEach((button) => {
@@ -190,120 +190,120 @@ function calculateAnnuity(loanAmount, interestRate, years) {
 function getAssessment(roe) {
   if (roe < 10) {
     return {
-      badge: '⚠️ Below target return',
-      range: 'ROE below 10%',
+      badge: '⚠️ Unter der Zielrendite',
+      range: 'ROE unter 10 %',
       tone: 'is-warning-soft',
     };
   }
   if (roe < 15) {
     return {
-      badge: '⚠️ Solid, but can be improved',
-      range: 'ROE between 10% and 15%',
+      badge: '⚠️ Solide, aber ausbaufähig',
+      range: 'ROE zwischen 10 % und 15 %',
       tone: 'is-warning',
     };
   }
   if (roe <= 25) {
     return {
-      badge: '✅ Attractive',
-      range: 'ROE between 15% and 25%',
+      badge: '✅ Attraktiv',
+      range: 'ROE zwischen 15 % und 25 %',
       tone: 'is-positive',
     };
   }
   return {
-    badge: 'Strong model result',
-    range: 'ROE above 25%',
+    badge: 'Starkes Modellergebnis',
+    range: 'ROE über 25 %',
     tone: 'is-strong',
   };
 }
 
 function getInterpretation(roe, freeCashFlow) {
   if (freeCashFlow < 0) {
-    return 'Conservative pre-screening. The property does not fully support itself after financing. Review price, financing, or rental assumptions.';
+    return 'Konservative Vorauswahl. Das Objekt trägt sich nach Finanzierung nicht vollständig selbst. Prüfe Kaufpreis, Finanzierung oder die angesetzte Miete.';
   }
 
   if (roe < 10) {
-    return 'The property covers the modeled costs, but the return is below the target range. Review purchase price, financing, or rental assumptions.';
+    return 'Das Objekt deckt die angesetzten Kosten, die Rendite liegt aber unter dem Zielkorridor. Prüfe Kaufpreis, Finanzierung oder die angesetzte Miete.';
   }
 
   if (roe < 15) {
-    return 'Solid model result. Optimization potential exists in purchase price, financing, or rental income.';
+    return 'Solides Modellergebnis. Spielraum besteht beim Kaufpreis, bei der Finanzierung oder bei der Mieteinnahme.';
   }
 
   if (roe <= 25) {
-    return 'Attractive base case. The property supports itself and reaches a healthy target return under conservative assumptions.';
+    return 'Attraktiver Basisfall. Das Objekt trägt sich selbst und erreicht unter konservativen Annahmen eine gesunde Zielrendite.';
   }
 
-  return 'Strong overall case. Validate assumptions carefully to confirm long-term sustainability.';
+  return 'Starkes Gesamtbild. Prüfe die Annahmen besonders sorgfältig, um die langfristige Tragfähigkeit abzusichern.';
 }
 
 
 function getAssessmentNote(roe, freeCashFlow) {
   if (freeCashFlow < 0) {
     return `
-      <p>This is a conservative pre-screening.</p>
-      <p>The property does not fully support itself after financing under the current assumptions.</p>
-      <p>Improvements are typically possible through:</p>
+      <p>Dies ist eine konservative Vorauswahl.</p>
+      <p>Unter den aktuellen Annahmen trägt sich das Objekt nach Finanzierung nicht vollständig selbst.</p>
+      <p>Verbessern lässt sich das üblicherweise über:</p>
       <ul>
-        <li>better purchase price</li>
-        <li>optimized financing</li>
-        <li>higher rental income</li>
+        <li>besserer Kaufpreis</li>
+        <li>optimierte Finanzierung</li>
+        <li>höhere Mieteinnahme</li>
       </ul>
-      <p>Taxes are not included and may improve results in practice.</p>
+      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
     `;
   }
 
   if (roe < 10) {
     return `
-      <p>This is a conservative pre-screening.</p>
-      <p>The property generates positive cash flow but does not yet meet the target return.</p>
-      <p>Improvements are typically possible through:</p>
+      <p>Dies ist eine konservative Vorauswahl.</p>
+      <p>Das Objekt erwirtschaftet einen positiven Cashflow, erreicht die Zielrendite aber noch nicht.</p>
+      <p>Verbessern lässt sich das üblicherweise über:</p>
       <ul>
-        <li>better purchase price</li>
-        <li>optimized financing</li>
-        <li>higher rental income</li>
+        <li>besserer Kaufpreis</li>
+        <li>optimierte Finanzierung</li>
+        <li>höhere Mieteinnahme</li>
       </ul>
-      <p>Taxes are not included and may improve results in practice.</p>
+      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
     `;
   }
 
   if (roe < 15) {
     return `
-      <p>This is a conservative pre-screening.</p>
-      <p>The modeled scenario covers its costs and shows a solid base case, but there is still room for improvement.</p>
-      <p>Improvements are typically possible through:</p>
+      <p>Dies ist eine konservative Vorauswahl.</p>
+      <p>Das gerechnete Szenario deckt seine Kosten und ergibt einen soliden Basisfall, Luft nach oben bleibt aber.</p>
+      <p>Verbessern lässt sich das üblicherweise über:</p>
       <ul>
-        <li>better purchase price</li>
-        <li>optimized financing</li>
-        <li>higher rental income</li>
+        <li>besserer Kaufpreis</li>
+        <li>optimierte Finanzierung</li>
+        <li>höhere Mieteinnahme</li>
       </ul>
-      <p>Taxes are not included and may improve results in practice.</p>
+      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
     `;
   }
 
   if (roe <= 25) {
     return `
-      <p>This is a conservative pre-screening.</p>
-      <p>The property generates positive cash flow and meets the target return range.</p>
-      <p>Further upside is typically possible through:</p>
+      <p>Dies ist eine konservative Vorauswahl.</p>
+      <p>Das Objekt erwirtschaftet einen positiven Cashflow und liegt im Zielkorridor der Rendite.</p>
+      <p>Zusätzlicher Spielraum ergibt sich üblicherweise über:</p>
       <ul>
-        <li>better purchase price</li>
-        <li>optimized financing</li>
-        <li>higher rental income</li>
+        <li>besserer Kaufpreis</li>
+        <li>optimierte Finanzierung</li>
+        <li>höhere Mieteinnahme</li>
       </ul>
-      <p>Taxes are not included and may improve results in practice.</p>
+      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
     `;
   }
 
   return `
-    <p>This is a conservative pre-screening.</p>
-    <p>The property generates positive cash flow and exceeds the target return range.</p>
-    <p>Please validate key assumptions carefully, especially:</p>
+    <p>Dies ist eine konservative Vorauswahl.</p>
+    <p>Das Objekt erwirtschaftet einen positiven Cashflow und liegt über dem Zielkorridor der Rendite.</p>
+    <p>Prüfe die zentralen Annahmen besonders sorgfältig, vor allem:</p>
     <ul>
-      <li>purchase price realism</li>
-      <li>financing terms</li>
-      <li>sustainable rental income</li>
+      <li>ob der Kaufpreis realistisch ist</li>
+      <li>die Finanzierungskonditionen</li>
+      <li>ob die Miete dauerhaft erzielbar ist</li>
     </ul>
-    <p>Taxes are not included and may improve results in practice.</p>
+    <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
   `;
 }
 
@@ -347,7 +347,7 @@ function recalculate() {
 
   elements.equityHint.textContent =
     rawLoanAmount < 0
-      ? 'Equity exceeds total investment. Loan Amount is therefore set to €0 and LTV to 0.0%.'
+      ? 'Dein Eigenkapital übersteigt die Gesamtinvestition. Die Darlehenssumme wird deshalb auf 0 € und der LTV auf 0,0 % gesetzt.'
       : '';
 
   elements.resultTransferTax.textContent = formatCurrency(transferTax);
@@ -362,12 +362,12 @@ function recalculate() {
   elements.resultAnnuity.textContent = formatCurrency(annuity);
   elements.resultInterestYear1.textContent = formatCurrency(interestYear1);
   elements.resultPrincipalYear1.textContent = formatCurrency(principalYear1);
-  elements.resultOperatingCashFlow.textContent = `${formatCurrency(operatingCashFlow)} / year`;
-  elements.resultFreeCashFlow.textContent = `${formatCurrency(freeCashFlow)} / year`;
+  elements.resultOperatingCashFlow.textContent = `${formatCurrency(operatingCashFlow)} / Jahr`;
+  elements.resultFreeCashFlow.textContent = `${formatCurrency(freeCashFlow)} / Jahr`;
   elements.resultFreeCashFlowMonth.textContent = `${formatCurrency(freeCashFlowMonth)} / month`;
-  elements.resultPrincipalWealth.textContent = `${formatCurrency(principalYear1)} / year`;
-  elements.resultEconomicEffect.textContent = `${formatCurrency(totalEconomicEffect)} / year`;
-  elements.resultEconomicEffectAppreciation.textContent = `${formatCurrency(totalEconomicEffectWithAppreciation)} / year`;
+  elements.resultPrincipalWealth.textContent = `${formatCurrency(principalYear1)} / Jahr`;
+  elements.resultEconomicEffect.textContent = `${formatCurrency(totalEconomicEffect)} / Jahr`;
+  elements.resultEconomicEffectAppreciation.textContent = `${formatCurrency(totalEconomicEffectWithAppreciation)} / Jahr`;
   elements.resultRoe.textContent = formatPercent(roe);
   elements.resultRoeAppreciation.textContent = formatPercent(roeWithAppreciation);
 
@@ -376,7 +376,7 @@ function recalculate() {
   elements.assessmentBadge.textContent = assessment.badge;
   elements.assessmentRange.textContent = assessment.range;
   elements.interpretationText.textContent = getInterpretation(roe, freeCashFlow);
-  elements.summaryInsight.textContent = `💡 This property generates ${formatCurrency(freeCashFlowMonth)}/month free cash flow and builds ${formatCurrency(principalYear1)}/year in equity.`;
+  elements.summaryInsight.textContent = `💡 Dieses Objekt erwirtschaftet ${formatCurrency(freeCashFlowMonth)} freien Cashflow pro Monat und baut ${formatCurrency(principalYear1)} pro Jahr an Eigenkapital auf.`;
   elements.assessmentNote.innerHTML = getAssessmentNote(roe, freeCashFlow);
 }
 

@@ -171,7 +171,7 @@
   }
 
   function getPrivacyHref() {
-    return window.location.pathname.includes('/calculator/') ? '../datenschutz.html' : 'datenschutz.html';
+    return /\/(calculator|cashflow-rechner)\//.test(window.location.pathname) ? '../datenschutz.html' : 'datenschutz.html';
   }
 
   function ensureCookieSettingsLinks() {

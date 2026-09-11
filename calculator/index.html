@@ -1,336 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cashflow Calculator for Spanish Real Estate | The Spanish Wealth Model</title>
-  <meta name="description" content="Free cash flow calculator for Spanish real estate. Enter purchase price, financing, rent, and reserves to run a conservative pre-screening.">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://spanishwealthmodel.com/calculator/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weiterleitung zum Cashflow-Rechner</title>
+  <!-- Diese Seite lag frueher unter /calculator/ und ist nach /cashflow-rechner/ umgezogen.
+       GitHub Pages kann keinen 301 senden, deshalb Canonical + Meta-Refresh: Suchmaschinen
+       folgen dem Canonical, Besucher dem Refresh. -->
+  <link rel="canonical" href="https://spanishwealthmodel.com/cashflow-rechner/">
+  <meta name="robots" content="noindex,follow">
+  <meta http-equiv="refresh" content="0; url=/cashflow-rechner/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:site_name" content="The Spanish Wealth Model">
-  <meta property="og:title" content="Cashflow Calculator for Spanish Real Estate">
-  <meta property="og:description" content="Free cash flow calculator for Spanish real estate. Model purchase price, financing, rent, reserves, and return on equity.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://spanishwealthmodel.com/calculator/">
-  <meta property="og:image" content="https://spanishwealthmodel.com/cover_front.png">
-  <meta property="og:image:alt" content="Cover of The Spanish Wealth Model">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cashflow Calculator for Spanish Real Estate">
-  <meta name="twitter:description" content="Free cash flow calculator for conservative pre-screening of Spanish real estate investments.">
-  <meta name="twitter:image" content="https://spanishwealthmodel.com/cover_front.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260910-itp" />
-  <script src="../site-consent.js" defer></script>
-  <script src="../nav-menu.js" defer></script>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F8F3EC;
+      color: #2A2018;
+      font-family: system-ui, sans-serif;
+      font-size: 18px;
+      text-align: center;
+      padding: 2rem;
+    }
+    a { color: #B8943A; }
+  </style>
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="nav-wrap">
-      <a class="brand" href="../">The Spanish <span>Wealth Model</span></a>
-      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="nav-toggle-lines" aria-hidden="true"></span>
-      </button>
-      <nav class="site-nav" id="primary-navigation" aria-label="Primary navigation">
-        <a href="../#about">The Book</a>
-        <a href="../#phases">The System</a>
-        <a href="../#author">Author</a>
-        <a href="./">Cashflow Calculator</a>
-        <a href="../#purchase" class="btn-nav">Get the Book</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="page-shell">
-
-    <header class="hero">
-      <p class="eyebrow">Cashflow Calculator</p>
-      <h1>Analyze real estate deals in 2 minutes.</h1>
-      <p class="subtitle">
-        A simple-to-use, cash-flow-first calculator for purchase price, financing, rental income, and reserves — built for conservative pre-screening of real estate investments.
-        It calculates free cash flow after costs and before taxes, plus return on equity based on your mortgage assumptions.
-      </p>
-      <p class="book-reference">
-        Built on the framework from <strong>The Spanish Wealth Model</strong>.
-      </p>
-    </header>
-
-    <p class="tool-note">
-      Simplified model for conservative pre-screening. Personal tax, financing, and legal details should be checked separately.
-    </p>
-
-    <main class="app-grid" aria-label="Real estate cash flow calculator">
-      <section class="panel panel-inputs">
-        <div class="panel-header">
-          <h2>Inputs</h2>
-          <button id="resetButton" class="reset-button" type="button">Reset to Example</button>
-        </div>
-
-        <div class="inline-note">
-          Example values are loaded by default. Update any field to model your own scenario.
-        </div>
-
-        <section class="input-section">
-          <h3>Property</h3>
-          <div class="field-grid">
-            <label class="field">
-              <span>Purchase Price (€)</span>
-              <input id="purchasePrice" type="number" min="0" step="1000" />
-            </label>
-            <label class="field">
-              <span>Transfer Tax / ITP (%) <a class="fn" href="#cost-notes">*</a></span>
-              <input id="itpPercent" type="number" min="0" step="0.1" />
-            </label>
-            <label class="field">
-              <span>Ancillary Costs (%) <a class="fn" href="#cost-notes">**</a></span>
-              <input id="ancillaryPercent" type="number" min="0" step="0.1" />
-            </label>
-            <label class="field">
-              <span>Monthly Rent (€)</span>
-              <input id="monthlyRent" type="number" min="0" step="50" />
-            </label>
-            <label class="field">
-              <span>Expected Vacancy (months/year)</span>
-              <input id="vacancyMonths" type="number" min="0" max="12" step="1" />
-            </label>
-          </div>
-        </section>
-
-        <section class="input-section">
-          <h3>Financing</h3>
-          <p class="section-hint">
-            Enter your own capital contribution. <strong>Loan Amount</strong> and <strong>Loan-to-Value (LTV)</strong>
-            are derived automatically.
-          </p>
-          <div class="field-grid">
-            <label class="field">
-              <span>Equity (€)</span>
-              <input id="equity" type="number" min="0" step="1000" />
-              <small>Enter your own capital contribution. Loan amount and LTV are derived automatically.</small>
-            </label>
-            <label class="field">
-              <span>Interest Rate (% p.a.)</span>
-              <input id="interestRate" type="number" min="0" step="0.1" />
-            </label>
-            <label class="field">
-              <span>Loan Term (years)</span>
-              <input id="loanTerm" type="number" min="1" step="1" />
-            </label>
-          </div>
-          <div id="equityHint" class="status-hint" aria-live="polite"></div>
-        </section>
-
-        <section class="input-section">
-          <h3>Ongoing Costs</h3>
-          <div class="toggle-row" role="group" aria-label="Maintenance reserve input mode">
-            <span class="toggle-label">Maintenance Reserve</span>
-            <div class="toggle-group">
-              <button class="toggle-button is-active" type="button" data-maintenance-mode="percent">% of purchase
-                price</button>
-              <button class="toggle-button" type="button" data-maintenance-mode="annual">€/year</button>
-            </div>
-          </div>
-          <div class="field-grid">
-            <label class="field">
-              <span id="maintenanceLabel">Maintenance Reserve (% of Purchase Price)</span>
-              <input id="maintenanceValue" type="number" min="0" step="0.1" />
-            </label>
-            <label class="field field-wide">
-              <span>Non-recoverable Costs (€/year)</span>
-              <input id="otherCosts" type="number" min="0" step="50" />
-              <small>
-                Example: non-recoverable service charges, insurance, administration, and smaller ongoing costs.
-              </small>
-            </label>
-          </div>
-        </section>
-
-        <section class="input-section">
-          <h3>Optional</h3>
-          <div class="field-grid">
-            <label class="field field-wide">
-              <span>Annual Appreciation (%)</span>
-              <input id="appreciationRate" type="number" min="0" step="0.1" />
-              <small>Default is 0% for a conservative baseline.</small>
-            </label>
-          </div>
-        </section>
-      </section>
-
-      <section class="panel panel-results">
-        <div class="panel-header">
-          <h2>Results</h2>
-          <p class="results-meta">The key decision metrics update live.</p>
-        </div>
-
-        <section class="result-card result-card--highlight">
-          <h3>Key Metrics</h3>
-          <dl class="result-list result-list--summary">
-            <div>
-              <dt>Free Cash Flow / Month</dt>
-              <dd id="resultFreeCashFlowMonth" class="metric-emphasis metric-emphasis--strong"></dd>
-            </div>
-            <div>
-              <dt>Return on Equity (ROE)</dt>
-              <dd id="resultRoe" class="metric-emphasis"></dd>
-            </div>
-            <div>
-              <dt>ROE incl. Appreciation</dt>
-              <dd id="resultRoeAppreciation" class="metric-emphasis"></dd>
-            </div>
-          </dl>
-        </section>
-
-        <section class="assessment-card summary-card">
-          <p id="summaryInsight" class="summary-insight"></p>
-        </section>
-
-        <section class="assessment-card assessment-card--top">
-          <div id="assessmentBadge" class="assessment-badge">Loading assessment</div>
-          <p id="assessmentRange" class="assessment-range"></p>
-          <p id="interpretationText" class="interpretation-text"></p>
-          <div id="assessmentNote" class="assessment-note"></div>
-        </section>
-
-        <details class="details-results">
-          <summary>Detailed Results</summary>
-          <div class="details-results-body">
-            <section class="result-card">
-              <h3>Investment Overview</h3>
-              <dl class="result-list">
-                <div>
-                  <dt>Transfer Tax (ITP)</dt>
-                  <dd id="resultTransferTax"></dd>
-                </div>
-                <div>
-                  <dt>Ancillary Costs</dt>
-                  <dd id="resultAncillaryCosts"></dd>
-                </div>
-                <div>
-                  <dt>Closing Costs <span class="inline-meta">— ITP plus ancillary</span></dt>
-                  <dd id="resultClosingCosts"></dd>
-                </div>
-                <div>
-                  <dt>Total Investment</dt>
-                  <dd id="resultTotalInvestment"></dd>
-                </div>
-                <div>
-                  <dt>Loan Amount</dt>
-                  <dd id="resultLoanAmount"></dd>
-                </div>
-                <div>
-                  <dt>Loan-to-Value (LTV) <span class="inline-meta">— automatically calculated</span></dt>
-                  <dd id="resultLtv"></dd>
-                </div>
-              </dl>
-            </section>
-
-            <section class="result-card">
-              <h3>Rental and Cost Base</h3>
-              <dl class="result-list">
-                <div>
-                  <dt>Annual Rent (adjusted)</dt>
-                  <dd id="resultAnnualRent"></dd>
-                </div>
-                <div>
-                  <dt>Maintenance Reserve</dt>
-                  <dd id="resultMaintenance"></dd>
-                </div>
-                <div>
-                  <dt>Non-recoverable Costs</dt>
-                  <dd id="resultOtherCosts"></dd>
-                </div>
-              </dl>
-            </section>
-
-            <section class="result-card">
-              <h3>Financing</h3>
-              <dl class="result-list">
-                <div>
-                  <dt>Annual Debt Service / Annuity</dt>
-                  <dd id="resultAnnuity"></dd>
-                </div>
-                <div>
-                  <dt>Interest Portion Year 1</dt>
-                  <dd id="resultInterestYear1"></dd>
-                </div>
-                <div>
-                  <dt>Principal Repayment Year 1</dt>
-                  <dd id="resultPrincipalYear1"></dd>
-                </div>
-              </dl>
-            </section>
-
-            <section class="result-card">
-              <h3>Cash Flow</h3>
-              <dl class="result-list">
-                <div>
-                  <dt>Cash Flow (before financing) <span class="inline-meta">— before debt service</span></dt>
-                  <dd id="resultOperatingCashFlow"></dd>
-                </div>
-                <div>
-                  <dt>Free Cash Flow <span class="inline-meta">— after full financing</span></dt>
-                  <dd id="resultFreeCashFlow"></dd>
-                </div>
-              </dl>
-            </section>
-
-            <section class="result-card">
-              <h3>Wealth Effect</h3>
-              <dl class="result-list">
-                <div>
-                  <dt>Equity Build-up (Principal Repayment)</dt>
-                  <dd id="resultPrincipalWealth"></dd>
-                </div>
-                <div>
-                  <dt>Total Annual Wealth Gain</dt>
-                  <dd id="resultEconomicEffect" class="metric-emphasis"></dd>
-                </div>
-                <div>
-                  <dt>Total Wealth Gain (with appreciation)</dt>
-                  <dd id="resultEconomicEffectAppreciation" class="metric-emphasis"></dd>
-                </div>
-              </dl>
-            </section>
-          </div>
-        </details>
-      </section>
-    </main>
-
-    <section class="cost-notes" id="cost-notes">
-      <p><span class="fn-mark">*</span> <strong>Transfer tax (ITP)</strong> is set by each autonomous community, so the
-        rate depends on where you buy. New builds are not subject to ITP at all — they are taxed with VAT (IVA) plus
-        stamp duty (AJD) instead. Check the current rate for your region and enter it here.</p>
-      <p><span class="fn-mark">**</span> <strong>Ancillary costs</strong> cover notary, land registry, gestoría, legal
-        advice and any agent fee payable by the buyer. Depending on the deal these typically come to somewhere between
-        2&nbsp;% and 6&nbsp;% of the purchase price.</p>
-    </section>
-
-    <section class="contact-block">
-      <p class="contact-kicker">Feedback or technical notes about the calculator?</p>
-      <p><a href="../kontakt.html">Kontaktseite öffnen</a>
-      </p>
-    </section>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-brand">© 2026 Das Spanische Vermögensmodell</div>
-    <nav class="footer-links" aria-label="Legal links">
-      <a href="../impressum.html">Impressum</a>
-      <a href="../datenschutz.html">Datenschutz</a>
-      <a href="../rechtlicher-hinweis.html">Rechtlicher Hinweis</a>
-      <a href="../kontakt.html">Kontakt</a>
-      <a href="#cookie-einstellungen" data-cookie-settings>Cookie-Einstellungen</a>
-    </nav>
-    <div class="footer-copy">spanishwealthmodel.com</div>
-  </footer>
-
-  <script src="script-en.js?v=20260910-itp"></script>
+  <p>
+    Der Cashflow-Rechner ist umgezogen.<br>
+    <a href="/cashflow-rechner/">Weiter zum Cashflow-Rechner</a>
+  </p>
+  <script>location.replace('/cashflow-rechner/');</script>
 </body>
 
 </html>

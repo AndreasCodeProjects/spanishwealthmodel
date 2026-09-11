@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cashflow-Rechner für Immobilien in Spanien — kostenlos</title>
+  <meta name="description" content="Kaufpreis, Finanzierung, Miete und Rücklagen eingeben und in zwei Minuten sehen, ob eine Immobilie in Spanien cashflow-positiv ist. Kostenlos, ohne Registrierung.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://spanishwealthmodel.com/cashflow-rechner/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="Das Spanische Vermögensmodell">
+  <meta property="og:title" content="Cashflow-Rechner für Immobilien in Spanien — kostenlos">
+  <meta property="og:description" content="Kaufpreis, Finanzierung, Miete und Rücklagen eingeben und sofort sehen, ob eine Immobilie in Spanien cashflow-positiv ist.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://spanishwealthmodel.com/cashflow-rechner/">
+  <meta property="og:image" content="https://spanishwealthmodel.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cover des Buchs Das Spanische Vermögensmodell">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cashflow-Rechner für Immobilien in Spanien — kostenlos">
+  <meta name="twitter:description" content="In zwei Minuten prüfen, ob eine Immobilie in Spanien cashflow-positiv ist. Kostenlos, ohne Registrierung.">
+  <meta name="twitter:image" content="https://spanishwealthmodel.com/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=20260911-de" />
+  <script src="../site-consent.js" defer></script>
+  <script src="../nav-menu.js" defer></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="../">Das Spanische <span>Vermögensmodell</span></a>
+      <button class="nav-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="nav-toggle-lines" aria-hidden="true"></span>
+      </button>
+      <nav class="site-nav" id="primary-navigation" aria-label="Hauptnavigation">
+        <a href="../#hook">Das Buch</a>
+        <a href="../#phases">Das System</a>
+        <a href="../#beckham">Beckham-Law</a>
+        <a href="./">Cashflow-Rechner</a>
+        <a href="../#purchase" class="btn-nav">Benachrichtigen</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-shell">
+
+    <header class="hero">
+      <p class="eyebrow">Kostenloser Cashflow-Rechner</p>
+      <h1>Cashflow-Rechner für Immobilien in Spanien</h1>
+      <p class="subtitle">
+        Gib Kaufpreis, Finanzierung, Mieteinnahme und Rücklagen ein und sieh in zwei Minuten, ob sich eine Wohnung selbst trägt.
+        Der Rechner ermittelt den freien Cashflow nach Kosten und vor Steuern sowie die Eigenkapitalrendite auf Basis deiner Finanzierungsannahmen — bewusst konservativ, als Vorauswahl für ernsthafte Kandidaten.
+      </p>
+      <p class="book-reference">
+        Basiert auf dem Cashflow-Modell aus Phase 3 des Buchs <strong>Das Spanische Vermögensmodell</strong>.
+      </p>
+    </header>
+
+    <p class="tool-note">
+      Vereinfachtes Modell für eine konservative Vorauswahl. Deine persönliche Steuer-, Finanzierungs- und Rechtslage gehört separat geprüft.
+    </p>
+
+    <main class="app-grid" aria-label="Cashflow-Rechner für Immobilien">
+      <section class="panel panel-inputs">
+        <div class="panel-header">
+          <h2>Eingaben</h2>
+          <button id="resetButton" class="reset-button" type="button">Auf Beispiel zurücksetzen</button>
+        </div>
+
+        <div class="inline-note">
+          Beim Laden stehen die Beispielwerte einer Wohnung in Valencia drin. Ändere ein beliebiges Feld, um dein eigenes Objekt zu rechnen.
+        </div>
+
+        <section class="input-section">
+          <h3>Objekt</h3>
+          <div class="field-grid">
+            <label class="field">
+              <span>Kaufpreis (€)</span>
+              <input id="purchasePrice" type="number" min="0" step="1000" />
+            </label>
+            <label class="field">
+              <span>Grunderwerbsteuer / ITP (%) <a class="fn" href="#cost-notes">*</a></span>
+              <input id="itpPercent" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field">
+              <span>Kaufnebenkosten (%) <a class="fn" href="#cost-notes">**</a></span>
+              <input id="ancillaryPercent" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field">
+              <span>Monatliche Miete (€)</span>
+              <input id="monthlyRent" type="number" min="0" step="50" />
+            </label>
+            <label class="field">
+              <span>Erwarteter Leerstand (Monate/Jahr)</span>
+              <input id="vacancyMonths" type="number" min="0" max="12" step="1" />
+            </label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Finanzierung</h3>
+          <p class="section-hint">
+            Trag dein Eigenkapital ein. <strong>Darlehenssumme</strong> und <strong>Beleihungsauslauf (LTV)</strong>
+            ergeben sich daraus automatisch.
+          </p>
+          <div class="field-grid">
+            <label class="field">
+              <span>Eigenkapital (€)</span>
+              <input id="equity" type="number" min="0" step="1000" />
+              <small>Dein eingesetztes Kapital. Darlehenssumme und LTV werden daraus berechnet.</small>
+            </label>
+            <label class="field">
+              <span>Sollzins (% p.&nbsp;a.)</span>
+              <input id="interestRate" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field">
+              <span>Laufzeit (Jahre)</span>
+              <input id="loanTerm" type="number" min="1" step="1" />
+            </label>
+          </div>
+          <div id="equityHint" class="status-hint" aria-live="polite"></div>
+        </section>
+
+        <section class="input-section">
+          <h3>Laufende Kosten</h3>
+          <div class="toggle-row" role="group" aria-label="Eingabemodus Instandhaltungsrücklage">
+            <span class="toggle-label">Instandhaltungsrücklage</span>
+            <div class="toggle-group">
+              <button class="toggle-button is-active" type="button" data-maintenance-mode="percent">% vom Kaufpreis</button>
+              <button class="toggle-button" type="button" data-maintenance-mode="annual">€/Jahr</button>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="field">
+              <span id="maintenanceLabel">Instandhaltungsrücklage (% vom Kaufpreis)</span>
+              <input id="maintenanceValue" type="number" min="0" step="0.1" />
+            </label>
+            <label class="field field-wide">
+              <span>Nicht umlagefähige Kosten (€/Jahr)</span>
+              <input id="otherCosts" type="number" min="0" step="50" />
+              <small>
+                Zum Beispiel nicht umlagefähige Nebenkosten, Gebäudeversicherung, Verwaltung und kleinere laufende Posten.
+              </small>
+            </label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Optional</h3>
+          <div class="field-grid">
+            <label class="field field-wide">
+              <span>Jährliche Wertsteigerung (%)</span>
+              <input id="appreciationRate" type="number" min="0" step="0.1" />
+              <small>Standard ist 0&nbsp;% — bewusst konservativ, damit die Bewertung allein auf dem Cashflow beruht.</small>
+            </label>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel panel-results">
+        <div class="panel-header">
+          <h2>Ergebnis</h2>
+          <p class="results-meta">Die Kennzahlen aktualisieren sich live bei jeder Änderung.</p>
+        </div>
+
+        <section class="result-card result-card--highlight">
+          <h3>Kernkennzahlen</h3>
+          <dl class="result-list result-list--summary">
+            <div>
+              <dt>Freier Cashflow / Monat</dt>
+              <dd id="resultFreeCashFlowMonth" class="metric-emphasis metric-emphasis--strong"></dd>
+            </div>
+            <div>
+              <dt>Eigenkapitalrendite (ROE)</dt>
+              <dd id="resultRoe" class="metric-emphasis"></dd>
+            </div>
+            <div>
+              <dt>ROE inkl. Wertsteigerung</dt>
+              <dd id="resultRoeAppreciation" class="metric-emphasis"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="assessment-card summary-card">
+          <p id="summaryInsight" class="summary-insight"></p>
+        </section>
+
+        <section class="assessment-card assessment-card--top">
+          <div id="assessmentBadge" class="assessment-badge">Bewertung wird geladen</div>
+          <p id="assessmentRange" class="assessment-range"></p>
+          <p id="interpretationText" class="interpretation-text"></p>
+          <div id="assessmentNote" class="assessment-note"></div>
+        </section>
+
+        <details class="details-results">
+          <summary>Detaillierte Ergebnisse</summary>
+          <div class="details-results-body">
+            <section class="result-card">
+              <h3>Investitionsübersicht</h3>
+              <dl class="result-list">
+                <div>
+                  <dt>Grunderwerbsteuer (ITP)</dt>
+                  <dd id="resultTransferTax"></dd>
+                </div>
+                <div>
+                  <dt>Kaufnebenkosten</dt>
+                  <dd id="resultAncillaryCosts"></dd>
+                </div>
+                <div>
+                  <dt>Erwerbskosten gesamt <span class="inline-meta">— ITP plus Nebenkosten</span></dt>
+                  <dd id="resultClosingCosts"></dd>
+                </div>
+                <div>
+                  <dt>Gesamtinvestition</dt>
+                  <dd id="resultTotalInvestment"></dd>
+                </div>
+                <div>
+                  <dt>Darlehenssumme</dt>
+                  <dd id="resultLoanAmount"></dd>
+                </div>
+                <div>
+                  <dt>Beleihungsauslauf (LTV) <span class="inline-meta">— automatisch berechnet</span></dt>
+                  <dd id="resultLtv"></dd>
+                </div>
+              </dl>
+            </section>
+
+            <section class="result-card">
+              <h3>Miete und Kostenbasis</h3>
+              <dl class="result-list">
+                <div>
+                  <dt>Jahresmiete (nach Leerstand)</dt>
+                  <dd id="resultAnnualRent"></dd>
+                </div>
+                <div>
+                  <dt>Instandhaltungsrücklage</dt>
+                  <dd id="resultMaintenance"></dd>
+                </div>
+                <div>
+                  <dt>Nicht umlagefähige Kosten</dt>
+                  <dd id="resultOtherCosts"></dd>
+                </div>
+              </dl>
+            </section>
+
+            <section class="result-card">
+              <h3>Financing</h3>
+              <dl class="result-list">
+                <div>
+                  <dt>Jährlicher Kapitaldienst / Annuität</dt>
+                  <dd id="resultAnnuity"></dd>
+                </div>
+                <div>
+                  <dt>Zinsanteil Jahr 1</dt>
+                  <dd id="resultInterestYear1"></dd>
+                </div>
+                <div>
+                  <dt>Tilgungsanteil Jahr 1</dt>
+                  <dd id="resultPrincipalYear1"></dd>
+                </div>
+              </dl>
+            </section>
+
+            <section class="result-card">
+              <h3>Cashflow</h3>
+              <dl class="result-list">
+                <div>
+                  <dt>Cashflow vor Finanzierung <span class="inline-meta">— vor Kapitaldienst</span></dt>
+                  <dd id="resultOperatingCashFlow"></dd>
+                </div>
+                <div>
+                  <dt>Freier Cashflow <span class="inline-meta">— nach vollem Kapitaldienst</span></dt>
+                  <dd id="resultFreeCashFlow"></dd>
+                </div>
+              </dl>
+            </section>
+
+            <section class="result-card">
+              <h3>Vermögenseffekt</h3>
+              <dl class="result-list">
+                <div>
+                  <dt>Vermögensaufbau durch Tilgung</dt>
+                  <dd id="resultPrincipalWealth"></dd>
+                </div>
+                <div>
+                  <dt>Jährlicher Vermögenszuwachs gesamt</dt>
+                  <dd id="resultEconomicEffect" class="metric-emphasis"></dd>
+                </div>
+                <div>
+                  <dt>Vermögenszuwachs inkl. Wertsteigerung</dt>
+                  <dd id="resultEconomicEffectAppreciation" class="metric-emphasis"></dd>
+                </div>
+              </dl>
+            </section>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <section class="cost-notes" id="cost-notes">
+      <p><span class="fn-mark">*</span> <strong>Die Grunderwerbsteuer (ITP)</strong> legt jede autonome Region selbst
+        fest — der Satz hängt also davon ab, wo du kaufst. Neubauten fallen gar nicht unter die ITP, sondern werden mit
+        Mehrwertsteuer (IVA) und Beurkundungsteuer (AJD) belegt. Prüf den aktuellen Satz für deine Region und trag ihn
+        hier ein.</p>
+      <p><span class="fn-mark">**</span> <strong>Die Kaufnebenkosten</strong> umfassen Notar, Grundbuch (Registro),
+        Gestoría, Rechtsberatung und eine gegebenenfalls vom Käufer zu zahlende Maklerprovision. Je nach Objekt und
+        Ablauf liegen sie typischerweise zwischen 2&nbsp;% und 6&nbsp;% des Kaufpreises.</p>
+    </section>
+
+    <section class="contact-block">
+      <p class="contact-kicker">Feedback oder technische Hinweise zum Rechner?</p>
+      <p><a href="../kontakt.html">Kontaktseite öffnen</a>
+      </p>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-brand">© 2026 Das Spanische Vermögensmodell</div>
+    <nav class="footer-links" aria-label="Rechtliche Links">
+      <a href="../impressum.html">Impressum</a>
+      <a href="../datenschutz.html">Datenschutz</a>
+      <a href="../rechtlicher-hinweis.html">Rechtlicher Hinweis</a>
+      <a href="../kontakt.html">Kontakt</a>
+      <a href="#cookie-einstellungen" data-cookie-settings>Cookie-Einstellungen</a>
+    </nav>
+    <div class="footer-copy">spanishwealthmodel.com</div>
+  </footer>
+
+  <script src="script.js?v=20260911-de"></script>
+</body>
+
+</html>
