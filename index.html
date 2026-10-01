@@ -135,7 +135,7 @@
           "name": "Wo kann ich das Buch bestellen?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Das Buch ist im Verlag tredition erschienen — als Softcover und als Hardcover, eine E-Book-Ausgabe folgt etwas später. Am besten bestellst du direkt im tredition-Shop, dort geht die Bestellung unmittelbar an den Verlag. Alternativ kannst du es über jede deutsche Buchhandlung bestellen, dort genügt die ISBN 978-3-384-97613-0. Der Amazon-Eintrag wird derzeit noch ausgeliefert."
+            "text": "Das Buch ist im Verlag tredition erschienen — als Softcover und als Hardcover, eine E-Book-Ausgabe folgt etwas später. Am besten bestellst du direkt im tredition-Shop, dort geht die Bestellung unmittelbar an den Verlag. Alternativ findest du beide Ausgaben bei Amazon oder bestellst über jede deutsche Buchhandlung, dort genügt die ISBN 978-3-384-97613-0."
           }
         },
         {
@@ -626,6 +626,7 @@ blockquote {
   transition: background 0.2s, transform 0.15s;
 }
 .btn-channel:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-stack { display: flex; flex-direction: column; gap: 0.55rem; }
 .btn-channel.is-outline {
   background: transparent; color: #D9C79A;
   border: 1px solid rgba(212,170,85,0.4);
@@ -1020,8 +1021,13 @@ footer {
       <div class="channel-rank">Alternative</div>
       <h3 class="channel-name">Amazon</h3>
       <div class="channel-formats"><span>Softcover</span><span>Hardcover</span></div>
-      <p class="channel-text">Wenn du ohnehin ein Amazon-Konto nutzt und schnelle Lieferung bevorzugst. Der Eintrag wird derzeit noch ausgeliefert.</p>
-      <span class="btn-channel is-soon" aria-disabled="true">Link folgt in Kürze</span>
+      <p class="channel-text">Wenn du ohnehin ein Amazon-Konto nutzt und schnelle Lieferung bevorzugst. Dort hat jede Ausgabe ihre eigene Seite.</p>
+      <div class="btn-stack">
+        <a href="https://www.amazon.de/dp/3384976134" class="btn-channel is-outline" target="_blank" rel="noopener"
+           data-analytics-event="checkout_clicked" data-analytics-location="book_section" data-analytics-product="book_amazon_softcover">Softcover bei Amazon →</a>
+        <a href="https://www.amazon.de/dp/3384976142" class="btn-channel is-outline" target="_blank" rel="noopener"
+           data-analytics-event="checkout_clicked" data-analytics-location="book_section" data-analytics-product="book_amazon_hardcover">Hardcover bei Amazon →</a>
+      </div>
     </div>
     <div class="channel-card">
       <div class="channel-rank">Vor Ort</div>
@@ -1048,7 +1054,7 @@ footer {
   <div class="faq-list">
     <div class="faq-item">
       <h3 class="faq-q">Wo kann ich das Buch bestellen?</h3>
-      <p class="faq-a">Das Buch ist im Verlag tredition erschienen — als Softcover und als Hardcover, eine E-Book-Ausgabe folgt etwas später. Am besten bestellst du direkt im <a href="#purchase" style="color:var(--gold); border-bottom:1px solid var(--border-gold);">tredition-Shop</a>, dort geht die Bestellung unmittelbar an den Verlag. Alternativ kannst du es über jede deutsche Buchhandlung bestellen, dort genügt die ISBN 978-3-384-97613-0. Der Amazon-Eintrag wird derzeit noch ausgeliefert.</p>
+      <p class="faq-a">Das Buch ist im Verlag tredition erschienen — als Softcover und als Hardcover, eine E-Book-Ausgabe folgt etwas später. Am besten bestellst du direkt im <a href="#purchase" style="color:var(--gold); border-bottom:1px solid var(--border-gold);">tredition-Shop</a>, dort geht die Bestellung unmittelbar an den Verlag. Alternativ findest du beide Ausgaben bei Amazon oder bestellst über jede deutsche Buchhandlung, dort genügt die ISBN 978-3-384-97613-0.</p>
     </div>
     <div class="faq-item">
       <h3 class="faq-q">Ist das Buch für Menschen, die noch nicht ausgewandert sind — oder nur für die, die bereits in Spanien leben?</h3>
