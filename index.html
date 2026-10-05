@@ -632,6 +632,15 @@ blockquote {
   border: 1px solid rgba(212,170,85,0.4);
 }
 .btn-channel.is-outline:hover { background: rgba(212,170,85,0.12); color: #EFE7D6; }
+/* ISBN-Angaben: gleiche Optik wie die Buttons, aber auf lange Nummern ausgelegt */
+.btn-channel.is-isbn {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  cursor: default;
+  white-space: nowrap;
+}
 .btn-channel.is-soon {
   background: transparent;
   border: 1px dashed rgba(212,170,85,0.35);
@@ -668,11 +677,6 @@ blockquote {
 .buy-preview p {
   font-size: 0.92rem; color: #8FA8BA; line-height: 1.75;
   max-width: 660px; margin: 0 auto;
-}
-.buy-isbn { margin-top: 0.9rem !important; color: #C7D3D9 !important; }
-.buy-isbn strong {
-  color: #EFE7D6; font-weight: 500;
-  font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
 }
 
 /* ── FAQ ── */
@@ -1034,13 +1038,15 @@ footer {
       <h3 class="channel-name">Deine Buchhandlung</h3>
       <div class="channel-formats"><span>Softcover</span><span>Hardcover</span></div>
       <p class="channel-text">Das Buch ist über den Buchhandel gelistet und lässt sich in jeder deutschen Buchhandlung bestellen — nenne einfach die ISBN.</p>
-      <span class="btn-channel is-outline">ISBN 978-3-384-97613-0</span>
+      <div class="btn-stack">
+        <span class="btn-channel is-outline is-isbn">Softcover&ensp;978-3-384-97613-0</span>
+        <span class="btn-channel is-outline is-isbn">Hardcover&ensp;978-3-384-97614-7</span>
+      </div>
     </div>
   </div>
 
   <div class="buy-preview">
-    <p class="buy-isbn">ISBN Softcover: <strong>978-3-384-97613-0</strong><br>ISBN Hardcover: <strong>978-3-384-97614-7</strong></p>
-    <p style="margin-top:1rem;">Die E-Book-Ausgabe erscheint etwas später. <a href="mailto:spanishwealthmodel@gmail.com?subject=Benachrichtigung%20E-Book-Ausgabe&amp;body=Hallo%20Andreas%2C%0A%0Abitte%20gib%20mir%20Bescheid%2C%20sobald%20die%20E-Book-Ausgabe%20verf%C3%BCgbar%20ist.%0A%0AViele%20Gr%C3%BC%C3%9Fe%0A" style="color:var(--gold-light); border-bottom:1px solid rgba(212,170,85,0.4);">Schreib mir</a>, wenn ich dir dazu einmalig Bescheid geben soll.</p>
+    <p>Die E-Book-Ausgabe erscheint etwas später. <a href="mailto:spanishwealthmodel@gmail.com?subject=Benachrichtigung%20E-Book-Ausgabe&amp;body=Hallo%20Andreas%2C%0A%0Abitte%20gib%20mir%20Bescheid%2C%20sobald%20die%20E-Book-Ausgabe%20verf%C3%BCgbar%20ist.%0A%0AViele%20Gr%C3%BC%C3%9Fe%0A" style="color:var(--gold-light); border-bottom:1px solid rgba(212,170,85,0.4);">Schreib mir</a>, wenn ich dir dazu einmalig Bescheid geben soll.</p>
   </div>
 </div>
 </div>
