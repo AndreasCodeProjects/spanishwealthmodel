@@ -75,6 +75,10 @@
       },
       "url": "https://spanishwealthmodel.com",
       "image": "https://spanishwealthmodel.com/andreas_steinhausen_freigeschn.png",
+      "sameAs": [
+        "https://www.linkedin.com/in/andreas-steinhausen",
+        "https://www.facebook.com/profile.php?id=61595354755976"
+      ],
       "knowsAbout": [
         "Auswandern nach Spanien",
         "Beckham Law",
@@ -700,13 +704,14 @@ blockquote {
 /* ── FOOTER ── */
 footer {
   background: var(--navy); padding: 2.5rem 5vw;
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 1rem;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
 }
-.footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: #EEE8DC; letter-spacing: 0.06em; }
-.footer-links { display: flex; flex-wrap: wrap; gap: 1rem 1.8rem; justify-content: center; }
+.footer-brand { white-space: nowrap; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: #EEE8DC; letter-spacing: 0.06em; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: center; flex: 1 1 auto; }
 .footer-links a { font-size: 0.76rem; color: #C7D3D9; letter-spacing: 0.06em; transition: color 0.2s; }
 .footer-links a:hover { color: var(--gold-light); }
-.footer-copy { font-size: 0.76rem; color: #A8B8C4; justify-self: end; }
+.footer-sep { color: rgba(199,211,217,0.35); font-size: 0.76rem; }
+.footer-copy { font-size: 0.76rem; color: #A8B8C4; white-space: nowrap; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 860px) {
@@ -719,9 +724,9 @@ footer {
   .phase-row { grid-template-columns: 44px 1fr; gap: 0 1rem; }
   .phase-row-num { font-size: 1.9rem; }
   .author-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  footer { grid-template-columns: 1fr; justify-items: start; }
+  footer { flex-direction: column; align-items: flex-start; }
   .footer-links { justify-content: flex-start; flex-wrap: wrap; }
-  .footer-copy { justify-self: start; }
+
   .nav-links { gap: 1.2rem; }
 }
 @media (max-width: 680px) {
@@ -1095,6 +1100,9 @@ footer {
     <a href="rechtlicher-hinweis.html">Rechtlicher Hinweis</a>
     <a href="kontakt.html">Kontakt</a>
     <a href="#cookie-einstellungen" data-cookie-settings>Cookie-Einstellungen</a>
+    <span class="footer-sep" aria-hidden="true">·</span>
+    <a href="https://www.linkedin.com/in/andreas-steinhausen" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://www.facebook.com/profile.php?id=61595354755976" target="_blank" rel="noopener">Facebook</a>
   </div>
   <div class="footer-copy">spanishwealthmodel.com</div>
 </footer>
