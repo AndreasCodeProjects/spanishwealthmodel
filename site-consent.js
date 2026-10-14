@@ -314,7 +314,9 @@
 
       if (/chat\.whatsapp\.com/i.test(href)) {
         trackEvent('community_clicked', {
-          location: link.closest('footer') ? 'footer' : 'page',
+          location:
+            link.dataset.analyticsLocation ||
+            (link.closest('footer') ? 'footer' : 'page'),
         });
       }
 
