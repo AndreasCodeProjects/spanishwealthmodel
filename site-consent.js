@@ -10,6 +10,7 @@
     'result_viewed',
     'checkout_clicked',
     'email_contact_clicked',
+    'community_clicked',
     'purchase_completed',
   ]);
   const CHECKOUT_LOCATIONS = new Set(['hero', 'calculator_result', 'book_section', 'footer', 'sticky_cta']);
@@ -307,6 +308,12 @@
 
       if (href.startsWith('mailto:')) {
         trackEvent('email_contact_clicked', {
+          location: link.closest('footer') ? 'footer' : 'page',
+        });
+      }
+
+      if (/chat\.whatsapp\.com/i.test(href)) {
+        trackEvent('community_clicked', {
           location: link.closest('footer') ? 'footer' : 'page',
         });
       }
