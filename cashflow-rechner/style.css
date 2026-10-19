@@ -25,7 +25,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; color-scheme: light; }
 body {
   margin: 0;
   font-family: 'Jost', system-ui, sans-serif;

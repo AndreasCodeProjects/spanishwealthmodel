@@ -17,7 +17,7 @@
   --r-lg: 8px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 18px; }
+html { scroll-behavior: smooth; font-size: 18px; color-scheme: light; }
 body {
   font-family: 'Jost', system-ui, sans-serif;
   background: var(--cream);
