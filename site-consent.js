@@ -312,7 +312,7 @@
         });
       }
 
-      if (/chat\.whatsapp\.com/i.test(href)) {
+      if (/linkedin\.com/i.test(href)) {
         trackEvent('community_clicked', {
           location:
             link.dataset.analyticsLocation ||

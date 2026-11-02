@@ -364,7 +364,7 @@ function recalculate() {
   elements.resultPrincipalYear1.textContent = formatCurrency(principalYear1);
   elements.resultOperatingCashFlow.textContent = `${formatCurrency(operatingCashFlow)} / Jahr`;
   elements.resultFreeCashFlow.textContent = `${formatCurrency(freeCashFlow)} / Jahr`;
-  elements.resultFreeCashFlowMonth.textContent = `${formatCurrency(freeCashFlowMonth)} / month`;
+  elements.resultFreeCashFlowMonth.textContent = `${formatCurrency(freeCashFlowMonth)} / Monat`;
   elements.resultPrincipalWealth.textContent = `${formatCurrency(principalYear1)} / Jahr`;
   elements.resultEconomicEffect.textContent = `${formatCurrency(totalEconomicEffect)} / Jahr`;
   elements.resultEconomicEffectAppreciation.textContent = `${formatCurrency(totalEconomicEffectWithAppreciation)} / Jahr`;

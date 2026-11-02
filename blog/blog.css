@@ -134,6 +134,28 @@ body > nav.is-open .nav-toggle-lines::after  { transform: rotate(-45deg); }
 .art-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); color: #4E443A; }
 .art-table tr:last-child td { border-bottom: 0; }
 
+/* Auf schmalen Bildschirmen stapeln Tabellen als kompakte Bloecke,
+   statt horizontal zu scrollen. data-label kommt aus dem Konverter:
+   erste Spalte ist die Zeilenueberschrift, letzte die Erlaeuterung,
+   alles dazwischen wird beschriftet. */
+@media (max-width: 640px) {
+  .art-table-wrap { overflow-x: visible; }
+  .art-table, .art-table tbody, .art-table tr, .art-table td { display: block; width: 100%; }
+  .art-table thead { display: none; }
+  .art-table tr {
+    border: 1px solid var(--border); border-radius: 10px; background: #fff;
+    margin-bottom: 0.6rem; padding: 0.75rem 1rem;
+  }
+  .art-table td { border-bottom: 0; padding: 0.1rem 0; font-size: 0.86rem; line-height: 1.5; }
+  .art-table td::before { content: attr(data-label) ": "; color: var(--stone); }
+  .art-table td:first-child {
+    font-weight: 500; color: var(--navy); font-size: 0.96rem; margin-bottom: 0.2rem;
+  }
+  .art-table td:first-child::before,
+  .art-table td:last-child::before { content: none; }
+  .art-table td:last-child { color: var(--stone); }
+}
+
 .art-rule { border: 0; border-top: 1px solid var(--border); margin: 2.6rem 0; }
 .art-note { font-size: 0.86rem !important; color: var(--stone) !important; line-height: 1.75 !important; }
 
