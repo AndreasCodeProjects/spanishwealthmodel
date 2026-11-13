@@ -154,6 +154,25 @@ body > nav.is-open .nav-toggle-lines::after  { transform: rotate(-45deg); }
   .art-table td:first-child::before,
   .art-table td:last-child::before { content: none; }
   .art-table td:last-child { color: var(--stone); }
+
+  /* Vergleichsmatrix: hier ist die letzte Spalte eine Option wie jede andere
+     und braucht ihre Beschriftung. */
+  .art-table.is-matrix td:last-child::before { content: attr(data-label) ": "; }
+  .art-table.is-matrix td:last-child { color: #4E443A; }
+}
+
+/* Vergleichsmatrizen sind breit: kleinere Schrift, Kopfzeile darf umbrechen. */
+@media (min-width: 641px) {
+  .art-table.is-matrix { font-size: 0.8rem; min-width: 640px; }
+  .art-table.is-matrix th { font-size: 0.64rem; padding: 0.7rem 0.75rem; white-space: normal; }
+  .art-table.is-matrix td { padding: 0.7rem 0.75rem; vertical-align: top; }
+  .art-table.is-matrix td:first-child { font-weight: 500; color: var(--navy); }
+}
+
+/* Ab Desktop-Breite darf die Matrix aus der 720-px-Textspalte herauswachsen und
+   den freien Platz rechts daneben nutzen, statt horizontal zu scrollen. */
+@media (min-width: 1100px) {
+  .is-matrix-wrap { width: 140%; max-width: calc(100vw - 6rem); }
 }
 
 .art-rule { border: 0; border-top: 1px solid var(--border); margin: 2.6rem 0; }
