@@ -521,6 +521,235 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.65;
 }
 
+/* ── Eingeklappte Annahmen ── */
+.assumptions {
+  margin-top: 1.4rem;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.assumptions summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: relative;
+  padding-right: 3.2rem;
+}
+.assumptions summary::-webkit-details-marker { display: none; }
+.assumptions summary::after {
+  content: '+';
+  position: absolute;
+  right: 1.2rem;
+  top: 1rem;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-size: 1rem;
+  line-height: 1;
+}
+.assumptions[open] summary::after { content: '2'; }
+.assumptions[open] summary { border-bottom: 1px solid var(--border); }
+.assumptions-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.18rem;
+  font-weight: 500;
+  color: var(--navy);
+}
+.assumptions-summary {
+  font-size: 0.78rem;
+  color: var(--stone);
+  line-height: 1.55;
+}
+.assumptions-body { padding: 1.2rem; background: var(--cream-deep); }
+.assumptions-body .input-section:first-child { padding-top: 0; }
+
+/* ── Mitlaufende Ergebniszeile (nur wenn die Spalten gestapelt sind) ── */
+.sticky-result { display: none; }
+@media (max-width: 980px) {
+  .sticky-result {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "label cta" "value cta";
+    align-items: center;
+    column-gap: 0.8rem;
+    row-gap: 0.1rem;
+    width: 100%;
+    padding: 0.85rem clamp(0.9rem, 4vw, 1.4rem);
+    border: 0;
+    border-top: 1px solid rgba(184,148,58,0.35);
+    background: var(--navy);
+    color: #F3ECD8;
+    font-family: 'Jost', system-ui, sans-serif;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 -8px 24px rgba(20,38,57,0.18);
+  }
+  .sticky-result[hidden] { display: none; }
+  .sticky-result-label {
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    grid-area: label;
+  }
+  .sticky-result-value {
+    grid-area: value;
+    white-space: nowrap;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .sticky-result-cta {
+    grid-area: cta;
+    align-self: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: #A9BDCB;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  body.has-sticky-result .page-shell { padding-bottom: 72px; }
+}
+
+/* ── Leitzahl ── */
+.headline-card {
+  background: var(--navy);
+  border: 1px solid rgba(184,148,58,0.3);
+  border-radius: var(--r-lg);
+  padding: 1.8rem 1.5rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+.headline-label {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.headline-value {
+  margin: 0.5rem 0 0.2rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.05;
+  color: #F3ECD8;
+}
+.headline-unit {
+  margin: 0 0 1.1rem;
+  font-size: 0.82rem;
+  color: #A9BDCB;
+}
+.headline-card .assessment-badge { margin: 0 auto; }
+.headline-card .assessment-range {
+  margin: 0.7rem 0 0;
+  color: #8FA8BA;
+  font-size: 0.76rem;
+}
+
+/* ── Kennzahlen nebeneinander ── */
+.metric-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+.metric {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.1rem 1.15rem;
+}
+.metric[hidden] { display: none; }
+.metric-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.metric-value {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 500;
+  color: var(--navy);
+  margin: 0.3rem 0 0.45rem;
+  line-height: 1.15;
+}
+.metric-note {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--text-body);
+}
+
+/* ── Zinsszenario ── */
+.verdict-scope {
+  margin: 0.7rem 0 0.9rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--stone);
+}
+
+.stress-card {
+  background: var(--warn-soft);
+  border: 1px solid rgba(154,100,32,0.28);
+  border-radius: var(--r-lg);
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 1.2rem;
+}
+.stress-card[hidden] { display: none; }
+.stress-card.is-critical {
+  background: var(--danger-soft);
+  border-color: rgba(138,52,64,0.3);
+}
+.stress-head {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--warn);
+  margin-bottom: 0.5rem;
+}
+.stress-card.is-critical .stress-head { color: var(--danger); }
+.stress-body {
+  margin: 0 0 0.6rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.stress-advice {
+  margin: 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(154,100,32,0.18);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-body);
+}
+.stress-advice strong { color: var(--navy); font-weight: 500; }
+
+.result-card-note {
+  margin: 0.9rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--stone);
+}
+
 .details-results {
   margin-top: 1.2rem;
   background: var(--cream);

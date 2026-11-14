@@ -37,6 +37,13 @@ const elements = {
   maintenanceToggleButtons: document.querySelectorAll('[data-maintenance-mode]'),
   equityHint: document.getElementById('equityHint'),
   resetButton: document.getElementById('resetButton'),
+  assumptionSummary: document.getElementById('assumptionSummary'),
+  appreciationRows: document.querySelectorAll('[data-appreciation]'),
+  verdictScope: document.getElementById('verdictScope'),
+  rateStress: document.getElementById('rateStress'),
+  rateStressText: document.getElementById('rateStressText'),
+  stickyResult: document.getElementById('stickyResult'),
+  stickyResultValue: document.getElementById('stickyResultValue'),
   resultTransferTax: document.getElementById('resultTransferTax'),
   resultAncillaryCosts: document.getElementById('resultAncillaryCosts'),
   resultClosingCosts: document.getElementById('resultClosingCosts'),
@@ -134,7 +141,87 @@ function formatCurrency(value) {
 }
 
 function formatPercent(value) {
-  return `${value.toFixed(1)}%`;
+  const zahl = new Intl.NumberFormat('de-DE', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value);
+  return `${zahl} %`;
+}
+
+function formatNumber(value) {
+  return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 }).format(value);
+}
+
+// Ergebnisfelder koennen sich beim Umbau der Seite aendern. Ein fehlendes Feld
+// darf die Berechnung nicht abbrechen, sonst bleibt das ganze Ergebnis leer.
+function setText(key, value) {
+  const el = elements[key];
+  if (!el) {
+    console.warn(`[calculator] Ergebnisfeld "${key}" nicht gefunden - uebersprungen.`);
+    return;
+  }
+  el.textContent = value;
+}
+
+// Zusammenfassung der eingeklappten Annahmen, damit sichtbar bleibt,
+// womit gerechnet wird, ohne alle Felder aufzuklappen.
+function updateAssumptionSummary() {
+  if (!elements.assumptionSummary) return;
+  const leerstand = state.vacancyMonths === 1
+    ? '1 Monat Leerstand'
+    : `${formatNumber(state.vacancyMonths)} Monate Leerstand`;
+  const ruecklage = state.maintenanceMode === 'percent'
+    ? `Rücklage ${formatNumber(state.maintenanceValue)} %`
+    : `Rücklage ${formatCurrency(state.maintenanceValue)}/Jahr`;
+  const wertsteigerung = state.appreciationRate > 0
+    ? `${formatNumber(state.appreciationRate)} % Wertsteigerung`
+    : 'keine Wertsteigerung';
+
+  elements.assumptionSummary.textContent = [
+    `ITP ${formatNumber(state.itpPercent)} %`,
+    `Nebenkosten ${formatNumber(state.ancillaryPercent)} %`,
+    leerstand,
+    `${formatNumber(state.loanTerm)} Jahre Laufzeit`,
+    ruecklage,
+    wertsteigerung,
+  ].join(' · ');
+}
+
+function updateAppreciationVisibility() {
+  const sichtbar = state.appreciationRate > 0;
+  elements.appreciationRows.forEach((row) => {
+    row.hidden = !sichtbar;
+  });
+}
+
+// Sind Eingaben und Ergebnis untereinander (schmale Bildschirme), sieht man beim
+// Tippen die Leitzahl nicht. Dann blendet sich unten eine Ergebniszeile ein,
+// sobald die grosse Zahl aus dem Blickfeld gescrollt ist.
+function observeStickyResult() {
+  const headline = document.querySelector('.headline-card');
+  if (!headline || !elements.stickyResult || !('IntersectionObserver' in window)) return;
+
+  let ausserhalb = false;
+
+  const aktualisieren = () => {
+    const gestapelt = window.matchMedia('(max-width: 980px)').matches;
+    const zeigen = gestapelt && ausserhalb;
+    elements.stickyResult.hidden = !zeigen;
+    document.body.classList.toggle('has-sticky-result', zeigen);
+  };
+
+  new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      ausserhalb = !entry.isIntersecting;
+    });
+    aktualisieren();
+  }, { threshold: 0.1 }).observe(headline);
+
+  window.addEventListener('resize', aktualisieren);
+
+  elements.stickyResult.addEventListener('click', () => {
+    headline.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 }
 
 // Alle Eingabefelder, die aus `state` befuellt und ueberwacht werden.
@@ -187,123 +274,198 @@ function calculateAnnuity(loanAmount, interestRate, years) {
   return loanAmount * ((i * factor) / (factor - 1));
 }
 
+// Massstab der Bewertung ist ein breit gestreuter ETF mit rund 7 % im Jahr.
+// Wer Kapital in einem einzelnen Objekt bindet und Arbeit hineinsteckt, sollte
+// spuerbar darueber liegen. Gerechnet wird vor Steuern und ohne Wertsteigerung.
+const ETF_VERGLEICH = 7;
+
 function getAssessment(roe) {
-  if (roe < 10) {
+  if (roe < 4) {
     return {
       badge: '⚠️ Unter der Zielrendite',
-      range: 'ROE unter 10 %',
+      range: 'Rendite unter 4 % — weniger als ein ETF',
       tone: 'is-warning-soft',
     };
   }
-  if (roe < 15) {
+  if (roe < ETF_VERGLEICH) {
     return {
-      badge: '⚠️ Solide, aber ausbaufähig',
-      range: 'ROE zwischen 10 % und 15 %',
+      badge: '⚠️ Etwa auf ETF-Niveau',
+      range: 'Rendite zwischen 4 % und 7 %',
       tone: 'is-warning',
     };
   }
-  if (roe <= 25) {
+  if (roe <= 12) {
     return {
       badge: '✅ Attraktiv',
-      range: 'ROE zwischen 15 % und 25 %',
+      range: 'Rendite zwischen 7 % und 12 % — über ETF-Niveau',
       tone: 'is-positive',
     };
   }
   return {
-    badge: 'Starkes Modellergebnis',
-    range: 'ROE über 25 %',
+    badge: 'Starkes Ergebnis — Annahmen prüfen',
+    range: 'Rendite über 12 % — in diesem Markt ungewöhnlich',
     tone: 'is-strong',
   };
 }
 
-function getInterpretation(roe, freeCashFlow) {
-  if (freeCashFlow < 0) {
-    return 'Konservative Vorauswahl. Das Objekt trägt sich nach Finanzierung nicht vollständig selbst. Prüfe Kaufpreis, Finanzierung oder die angesetzte Miete.';
-  }
+// Was passiert, wenn der Zins steigt? Bei variabler Finanzierung ist der Zins
+// von heute nur eine Momentaufnahme. Deshalb rechnet der Rechner denselben Fall
+// mit zwei Prozentpunkten mehr durch.
+const ZINS_AUFSCHLAG = 2;
 
-  if (roe < 10) {
-    return 'Das Objekt deckt die angesetzten Kosten, die Rendite liegt aber unter dem Zielkorridor. Prüfe Kaufpreis, Finanzierung oder die angesetzte Miete.';
-  }
+function getRateStress({ loanAmount, annualRent, maintenance, otherCosts }) {
+  if (loanAmount <= 0) return null;
 
-  if (roe < 15) {
-    return 'Solides Modellergebnis. Spielraum besteht beim Kaufpreis, bei der Finanzierung oder bei der Mieteinnahme.';
-  }
+  const stressRate = (state.interestRate + ZINS_AUFSCHLAG) / 100;
+  const stressAnnuity = calculateAnnuity(stressRate === 0 ? 0 : loanAmount, stressRate, state.loanTerm);
+  const stressFreeCashFlow = annualRent - stressAnnuity - maintenance - otherCosts;
+  const stressEffect = annualRent - loanAmount * stressRate - maintenance - otherCosts;
+  const stressRoe = state.equity > 0 ? (stressEffect / state.equity) * 100 : 0;
 
-  if (roe <= 25) {
-    return 'Attraktiver Basisfall. Das Objekt trägt sich selbst und erreicht unter konservativen Annahmen eine gesunde Zielrendite.';
-  }
-
-  return 'Starkes Gesamtbild. Prüfe die Annahmen besonders sorgfältig, um die langfristige Tragfähigkeit abzusichern.';
+  return {
+    monat: stressFreeCashFlow / 12,
+    roe: stressRoe,
+    zins: state.interestRate + ZINS_AUFSCHLAG,
+  };
 }
 
+// Die Bewertung beruht bewusst nur auf Miete und Finanzierung. Eine moegliche
+// Wertsteigerung kaeme obendrauf - das muss dastehen, sonst wirkt das Urteil
+// strenger, als es gemeint ist.
+function renderVerdictScope(roe, roeWithAppreciation) {
+  if (!elements.verdictScope) return;
+
+  if (state.appreciationRate > 0) {
+    elements.verdictScope.textContent =
+      `Diese Bewertung beruht allein auf Miete und Finanzierung — sie liegt bei `
+      + `${formatPercent(roe)}. Mit deinen ${formatNumber(state.appreciationRate)} % `
+      + `Wertsteigerung wären es ${formatPercent(roeWithAppreciation)}. Das kommt `
+      + `obendrauf, bleibt aber eine Annahme und keine Einnahme.`;
+    return;
+  }
+
+  elements.verdictScope.textContent =
+    'Diese Bewertung beruht allein auf Miete und Finanzierung. Eine mögliche '
+    + 'Wertsteigerung ist nicht enthalten — sie käme obendrauf. Trag sie unter '
+    + '„Annahmen anpassen“ ein, wenn du sie sehen willst.';
+}
+
+function renderRateStress(stress, freeCashFlowMonth) {
+  if (!elements.rateStress) return;
+  if (!stress) {
+    elements.rateStress.hidden = true;
+    elements.rateStress.classList.remove('is-critical');
+    return;
+  }
+  elements.rateStress.hidden = false;
+
+  const jetzt = formatCurrency(freeCashFlowMonth);
+  const dann = formatCurrency(stress.monat);
+  const zuzahlung = formatCurrency(Math.abs(stress.monat));
+  const zinsAlt = formatPercent(state.interestRate);
+  const zinsNeu = formatPercent(stress.zins);
+  const rendite = formatPercent(stress.roe);
+
+  const kippt = freeCashFlowMonth >= 0 && stress.monat < 0;
+  elements.rateStress.classList.toggle('is-critical', kippt);
+
+  elements.rateStressText.textContent = kippt
+    ? `Steigt der Zins von ${zinsAlt} auf ${zinsNeu}, zahlst du ${zuzahlung} pro Monat drauf — statt ${jetzt} einzunehmen. Die Rendite fällt auf ${rendite}.`
+    : `Steigt der Zins von ${zinsAlt} auf ${zinsNeu}, bleiben ${dann} pro Monat statt ${jetzt}. Die Rendite läge dann bei ${rendite}.`;
+}
+
+function getInterpretation(roe, freeCashFlow) {
+  if (freeCashFlow < 0) {
+    return 'Das Objekt trägt sich nach Finanzierung nicht selbst — du zahlst jeden Monat zu. Prüfe Kaufpreis, Finanzierung oder die angesetzte Miete.';
+  }
+
+  if (roe < 4) {
+    return 'Das Objekt deckt seine Kosten, aber es bleibt weniger übrig als bei einem breit gestreuten ETF — bei deutlich mehr Aufwand, weniger Liquidität und dem Risiko eines einzelnen Objekts.';
+  }
+
+  if (roe < ETF_VERGLEICH) {
+    return 'Das liegt etwa auf dem Niveau eines breit gestreuten ETF. Dafür bindest du Kapital in einem einzelnen Objekt und steckst Arbeit hinein. Das lohnt sich nur mit einem guten Grund.';
+  }
+
+  if (roe <= 12) {
+    return 'Attraktiver Basisfall. Das Objekt liegt spürbar über dem, was ein breit gestreuter ETF liefert, und entschädigt damit für Aufwand und Klumpenrisiko.';
+  }
+
+  return 'Starkes Ergebnis — und in diesem Markt ungewöhnlich. Prüfe die Annahmen besonders sorgfältig: Ist der Kaufpreis realistisch? Ist die Miete dauerhaft erzielbar?';
+}
+
+
+const MASSSTAB = `
+  <p><strong>Woran gemessen wird:</strong> an einem breit gestreuten Aktien-ETF.
+  Der MSCI World hat über rollierende Fünfzehnjahreszeiträume seit 1975 rund
+  8&nbsp;% im Jahr gebracht — im schlechtesten Zeitraum 1,3&nbsp;%, im besten
+  über 14&nbsp;%. Das ist die Alternative, die du immer hast: ohne Kredit, ohne
+  Arbeit, jederzeit verkäuflich.</p>
+  <p><strong>Der Vergleich hinkt dabei zugunsten des ETF.</strong> Dessen Rendite
+  enthält den Kursgewinn. Die Rendite hier enthält <em>weder Wertsteigerung noch
+  Steuerwirkung</em> — beides käme bei der Wohnung noch obendrauf. Deshalb liegt
+  die Schwelle für „attraktiv“ bei 7&nbsp;% und nicht höher: Wer sie auf dieser
+  bewusst pessimistischen Rechnung erreicht, liegt real darüber.</p>
+`;
+
+const HEBEL = `
+  <p>Verbessern lässt sich das üblicherweise über:</p>
+  <ul>
+    <li>besserer Kaufpreis — der stärkste Hebel im Gespräch</li>
+    <li>höhere Mieteinnahme, sofern der Markt sie hergibt</li>
+    <li>bessere Finanzierungskonditionen</li>
+  </ul>
+`;
 
 function getAssessmentNote(roe, freeCashFlow) {
   if (freeCashFlow < 0) {
     return `
-      <p>Dies ist eine konservative Vorauswahl.</p>
-      <p>Unter den aktuellen Annahmen trägt sich das Objekt nach Finanzierung nicht vollständig selbst.</p>
-      <p>Verbessern lässt sich das üblicherweise über:</p>
-      <ul>
-        <li>besserer Kaufpreis</li>
-        <li>optimierte Finanzierung</li>
-        <li>höhere Mieteinnahme</li>
-      </ul>
-      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
+      <p>Bei der nächsten größeren Reparatur wird das unangenehm: Du musst dann
+      aus eigener Tasche nachlegen, während das Objekt ohnehin schon Geld kostet.</p>
+      ${HEBEL}
+      ${MASSSTAB}
     `;
   }
 
-  if (roe < 10) {
+  if (roe < 4) {
     return `
-      <p>Dies ist eine konservative Vorauswahl.</p>
-      <p>Das Objekt erwirtschaftet einen positiven Cashflow, erreicht die Zielrendite aber noch nicht.</p>
-      <p>Verbessern lässt sich das üblicherweise über:</p>
-      <ul>
-        <li>besserer Kaufpreis</li>
-        <li>optimierte Finanzierung</li>
-        <li>höhere Mieteinnahme</li>
-      </ul>
-      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
+      <p>Dafür bindest du Kapital, nimmst Kredit auf und hast Arbeit mit Mietern,
+      Handwerkern und Behörden. Dieses Verhältnis geht nicht auf.</p>
+      ${HEBEL}
+      ${MASSSTAB}
     `;
   }
 
-  if (roe < 15) {
+  if (roe < ETF_VERGLEICH) {
     return `
-      <p>Dies ist eine konservative Vorauswahl.</p>
-      <p>Das gerechnete Szenario deckt seine Kosten und ergibt einen soliden Basisfall, Luft nach oben bleibt aber.</p>
-      <p>Verbessern lässt sich das üblicherweise über:</p>
-      <ul>
-        <li>besserer Kaufpreis</li>
-        <li>optimierte Finanzierung</li>
-        <li>höhere Mieteinnahme</li>
-      </ul>
-      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
+      <p>Für denselben Ertrag nimmst du hier deutlich mehr auf dich: ein einzelnes
+      Objekt statt breiter Streuung, gebundenes Kapital und laufenden Aufwand.</p>
+      <p>Das kann sich trotzdem lohnen — etwa wenn du der Lage langfristig mehr
+      zutraust oder die Steuerwirkung in deinem Fall stark ist. Ein Selbstläufer
+      ist es nicht.</p>
+      ${HEBEL}
+      ${MASSSTAB}
     `;
   }
 
-  if (roe <= 25) {
+  if (roe <= 12) {
     return `
-      <p>Dies ist eine konservative Vorauswahl.</p>
-      <p>Das Objekt erwirtschaftet einen positiven Cashflow und liegt im Zielkorridor der Rendite.</p>
-      <p>Zusätzlicher Spielraum ergibt sich üblicherweise über:</p>
-      <ul>
-        <li>besserer Kaufpreis</li>
-        <li>optimierte Finanzierung</li>
-        <li>höhere Mieteinnahme</li>
-      </ul>
-      <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
+      <p>Prüfe trotzdem, ob die angesetzte Miete dauerhaft erzielbar ist. Sie ist
+      die Zahl, bei der sich die meisten selbst betrügen — und sie trägt das
+      ganze Ergebnis.</p>
+      ${MASSSTAB}
     `;
   }
 
   return `
-    <p>Dies ist eine konservative Vorauswahl.</p>
-    <p>Das Objekt erwirtschaftet einen positiven Cashflow und liegt über dem Zielkorridor der Rendite.</p>
-    <p>Prüfe die zentralen Annahmen besonders sorgfältig, vor allem:</p>
+    <p>Bruttomietrenditen über 10&nbsp;% gibt es in spanischen Großstädten
+    praktisch nicht. Prüfe deshalb besonders sorgfältig:</p>
     <ul>
-      <li>ob der Kaufpreis realistisch ist</li>
-      <li>die Finanzierungskonditionen</li>
-      <li>ob die Miete dauerhaft erzielbar ist</li>
+      <li>Ist der Kaufpreis realistisch, oder steckt ein Sanierungsstau dahinter?</li>
+      <li>Ist die Miete dauerhaft erzielbar, oder nur kurzfristig?</li>
+      <li>Stimmen Leerstand und Rücklage für dieses Objekt?</li>
     </ul>
-    <p>Steuern sind nicht eingerechnet und verbessern das Ergebnis in der Praxis meist.</p>
+    ${MASSSTAB}
   `;
 }
 
@@ -350,33 +512,42 @@ function recalculate() {
       ? 'Dein Eigenkapital übersteigt die Gesamtinvestition. Die Darlehenssumme wird deshalb auf 0 € und der LTV auf 0,0 % gesetzt.'
       : '';
 
-  elements.resultTransferTax.textContent = formatCurrency(transferTax);
-  elements.resultAncillaryCosts.textContent = formatCurrency(ancillaryCosts);
-  elements.resultClosingCosts.textContent = formatCurrency(closingCosts);
-  elements.resultTotalInvestment.textContent = formatCurrency(totalInvestment);
-  elements.resultLoanAmount.textContent = formatCurrency(loanAmount);
-  elements.resultLtv.textContent = formatPercent(ltv);
-  elements.resultAnnualRent.textContent = formatCurrency(annualRent);
-  elements.resultMaintenance.textContent = formatCurrency(maintenance);
-  elements.resultOtherCosts.textContent = formatCurrency(state.otherCosts);
-  elements.resultAnnuity.textContent = formatCurrency(annuity);
-  elements.resultInterestYear1.textContent = formatCurrency(interestYear1);
-  elements.resultPrincipalYear1.textContent = formatCurrency(principalYear1);
-  elements.resultOperatingCashFlow.textContent = `${formatCurrency(operatingCashFlow)} / Jahr`;
-  elements.resultFreeCashFlow.textContent = `${formatCurrency(freeCashFlow)} / Jahr`;
-  elements.resultFreeCashFlowMonth.textContent = `${formatCurrency(freeCashFlowMonth)} / Monat`;
-  elements.resultPrincipalWealth.textContent = `${formatCurrency(principalYear1)} / Jahr`;
-  elements.resultEconomicEffect.textContent = `${formatCurrency(totalEconomicEffect)} / Jahr`;
-  elements.resultEconomicEffectAppreciation.textContent = `${formatCurrency(totalEconomicEffectWithAppreciation)} / Jahr`;
-  elements.resultRoe.textContent = formatPercent(roe);
-  elements.resultRoeAppreciation.textContent = formatPercent(roeWithAppreciation);
+  setText('resultTransferTax', formatCurrency(transferTax));
+  setText('resultAncillaryCosts', formatCurrency(ancillaryCosts));
+  setText('resultClosingCosts', formatCurrency(closingCosts));
+  setText('resultTotalInvestment', formatCurrency(totalInvestment));
+  setText('resultLoanAmount', formatCurrency(loanAmount));
+  setText('resultLtv', formatPercent(ltv));
+  setText('resultAnnualRent', formatCurrency(annualRent));
+  setText('resultMaintenance', formatCurrency(maintenance));
+  setText('resultOtherCosts', formatCurrency(state.otherCosts));
+  setText('resultAnnuity', formatCurrency(annuity));
+  setText('resultInterestYear1', formatCurrency(interestYear1));
+  setText('resultPrincipalYear1', formatCurrency(principalYear1));
+  setText('resultOperatingCashFlow', `${formatCurrency(operatingCashFlow)} / Jahr`);
+  setText('resultFreeCashFlow', `${formatCurrency(freeCashFlow)} / Jahr`);
+  setText('resultFreeCashFlowMonth', `${formatCurrency(freeCashFlowMonth)} / Monat`);
+  setText('stickyResultValue', `${formatCurrency(freeCashFlowMonth)} / Monat`);
+  setText('resultPrincipalWealth', `${formatCurrency(principalYear1)} / Jahr`);
+  setText('resultEconomicEffect', `${formatCurrency(totalEconomicEffect)} / Jahr`);
+  setText('resultEconomicEffectAppreciation', `${formatCurrency(totalEconomicEffectWithAppreciation)} / Jahr`);
+  setText('resultRoe', formatPercent(roe));
+  setText('resultRoeAppreciation', formatPercent(roeWithAppreciation));
+
+  renderVerdictScope(roe, roeWithAppreciation);
+  renderRateStress(
+    getRateStress({ loanAmount, annualRent, maintenance, otherCosts: state.otherCosts }),
+    freeCashFlowMonth,
+  );
+  updateAssumptionSummary();
+  updateAppreciationVisibility();
 
   const assessment = getAssessment(roe);
   elements.assessmentBadge.className = `assessment-badge ${assessment.tone}`;
-  elements.assessmentBadge.textContent = assessment.badge;
-  elements.assessmentRange.textContent = assessment.range;
-  elements.interpretationText.textContent = getInterpretation(roe, freeCashFlow);
-  elements.summaryInsight.textContent = `💡 Dieses Objekt erwirtschaftet ${formatCurrency(freeCashFlowMonth)} freien Cashflow pro Monat und baut ${formatCurrency(principalYear1)} pro Jahr an Eigenkapital auf.`;
+  setText('assessmentBadge', assessment.badge);
+  setText('assessmentRange', assessment.range);
+  setText('interpretationText', getInterpretation(roe, freeCashFlow));
+  setText('summaryInsight', `💡 Dieses Objekt erwirtschaftet ${formatCurrency(freeCashFlowMonth)} freien Cashflow pro Monat und baut ${formatCurrency(principalYear1)} pro Jahr an Eigenkapital auf.`);
   elements.assessmentNote.innerHTML = getAssessmentNote(roe, freeCashFlow);
 }
 
@@ -414,3 +585,4 @@ fillInputs();
 attachEvents();
 recalculate();
 observeResultVisibility();
+observeStickyResult();
