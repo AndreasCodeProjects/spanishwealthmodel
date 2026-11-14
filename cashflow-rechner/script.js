@@ -39,6 +39,9 @@ const elements = {
   resetButton: document.getElementById('resetButton'),
   assumptionSummary: document.getElementById('assumptionSummary'),
   appreciationRows: document.querySelectorAll('[data-appreciation]'),
+  resultTotalInterest: document.getElementById('resultTotalInterest'),
+  resultGrossYield: document.getElementById('resultGrossYield'),
+  grossYieldVerdict: document.getElementById('grossYieldVerdict'),
   verdictScope: document.getElementById('verdictScope'),
   rateStress: document.getElementById('rateStress'),
   rateStressText: document.getElementById('rateStressText'),
@@ -283,27 +286,27 @@ function getAssessment(roe) {
   if (roe < 4) {
     return {
       badge: '⚠️ Unter der Zielrendite',
-      range: 'Rendite unter 4 % — weniger als ein ETF',
+      range: 'Eigenkapitalrendite unter 4 % — weniger als ein ETF',
       tone: 'is-warning-soft',
     };
   }
   if (roe < ETF_VERGLEICH) {
     return {
       badge: '⚠️ Etwa auf ETF-Niveau',
-      range: 'Rendite zwischen 4 % und 7 %',
+      range: 'Eigenkapitalrendite zwischen 4 % und 7 %',
       tone: 'is-warning',
     };
   }
   if (roe <= 12) {
     return {
       badge: '✅ Attraktiv',
-      range: 'Rendite zwischen 7 % und 12 % — über ETF-Niveau',
+      range: 'Eigenkapitalrendite zwischen 7 % und 12 % — über ETF-Niveau',
       tone: 'is-positive',
     };
   }
   return {
     badge: 'Starkes Ergebnis — Annahmen prüfen',
-    range: 'Rendite über 12 % — in diesem Markt ungewöhnlich',
+    range: 'Eigenkapitalrendite über 12 % — in diesem Markt ungewöhnlich',
     tone: 'is-strong',
   };
 }
@@ -332,12 +335,21 @@ function getRateStress({ loanAmount, annualRent, maintenance, otherCosts }) {
 // Die Bewertung beruht bewusst nur auf Miete und Finanzierung. Eine moegliche
 // Wertsteigerung kaeme obendrauf - das muss dastehen, sonst wirkt das Urteil
 // strenger, als es gemeint ist.
+// Schnellfilter aus Phase 3 des Buchs: ein Urteil allein aus Kaufpreis und
+// Miete, noch ohne Finanzierung. Bewusst dieselben Grenzen wie im Buch.
+function getGrossYieldVerdict(grossYield) {
+  if (grossYield < 5) return 'meist nicht passend';
+  if (grossYield < 8) return 'prüfenswert — solide Basis';
+  if (grossYield <= 10) return 'sehr interessant';
+  return 'genau prüfen — mögliche versteckte Risiken';
+}
+
 function renderVerdictScope(roe, roeWithAppreciation) {
   if (!elements.verdictScope) return;
 
   if (state.appreciationRate > 0) {
     elements.verdictScope.textContent =
-      `Diese Bewertung beruht allein auf Miete und Finanzierung — sie liegt bei `
+      `Diese Bewertung beruht allein auf Miete und Finanzierung — die Eigenkapitalrendite liegt bei `
       + `${formatPercent(roe)}. Mit deinen ${formatNumber(state.appreciationRate)} % `
       + `Wertsteigerung wären es ${formatPercent(roeWithAppreciation)}. Das kommt `
       + `obendrauf, bleibt aber eine Annahme und keine Einnahme.`;
@@ -370,8 +382,8 @@ function renderRateStress(stress, freeCashFlowMonth) {
   elements.rateStress.classList.toggle('is-critical', kippt);
 
   elements.rateStressText.textContent = kippt
-    ? `Steigt der Zins von ${zinsAlt} auf ${zinsNeu}, zahlst du ${zuzahlung} pro Monat drauf — statt ${jetzt} einzunehmen. Die Rendite fällt auf ${rendite}.`
-    : `Steigt der Zins von ${zinsAlt} auf ${zinsNeu}, bleiben ${dann} pro Monat statt ${jetzt}. Die Rendite läge dann bei ${rendite}.`;
+    ? `Steigt der Zins von ${zinsAlt} auf ${zinsNeu}, zahlst du ${zuzahlung} pro Monat drauf — statt ${jetzt} einzunehmen. Die Eigenkapitalrendite fällt auf ${rendite}.`
+    : `Steigt der Zins von ${zinsAlt} auf ${zinsNeu}, bleiben ${dann} pro Monat statt ${jetzt}. Die Eigenkapitalrendite läge dann bei ${rendite}.`;
 }
 
 function getInterpretation(roe, freeCashFlow) {
@@ -402,7 +414,7 @@ const MASSSTAB = `
   über 14&nbsp;%. Das ist die Alternative, die du immer hast: ohne Kredit, ohne
   Arbeit, jederzeit verkäuflich.</p>
   <p><strong>Der Vergleich hinkt dabei zugunsten des ETF.</strong> Dessen Rendite
-  enthält den Kursgewinn. Die Rendite hier enthält <em>weder Wertsteigerung noch
+  enthält den Kursgewinn. Die Eigenkapitalrendite hier enthält <em>weder Wertsteigerung noch
   Steuerwirkung</em> — beides käme bei der Wohnung noch obendrauf. Deshalb liegt
   die Schwelle für „attraktiv“ bei 7&nbsp;% und nicht höher: Wer sie auf dieser
   bewusst pessimistischen Rechnung erreicht, liegt real darüber.</p>
@@ -524,8 +536,14 @@ function recalculate() {
   setText('resultAnnuity', formatCurrency(annuity));
   setText('resultInterestYear1', formatCurrency(interestYear1));
   setText('resultPrincipalYear1', formatCurrency(principalYear1));
+  setText('resultTotalInterest', formatCurrency(Math.max(annuity * state.loanTerm - loanAmount, 0)));
   setText('resultOperatingCashFlow', `${formatCurrency(operatingCashFlow)} / Jahr`);
   setText('resultFreeCashFlow', `${formatCurrency(freeCashFlow)} / Jahr`);
+  const grossYield = state.purchasePrice > 0
+    ? ((state.monthlyRent * 12) / state.purchasePrice) * 100
+    : 0;
+  setText('resultGrossYield', formatPercent(grossYield));
+  setText('grossYieldVerdict', `Schnellfilter des Buchs: ${getGrossYieldVerdict(grossYield)}`);
   setText('resultFreeCashFlowMonth', `${formatCurrency(freeCashFlowMonth)} / Monat`);
   setText('stickyResultValue', `${formatCurrency(freeCashFlowMonth)} / Monat`);
   setText('resultPrincipalWealth', `${formatCurrency(principalYear1)} / Jahr`);

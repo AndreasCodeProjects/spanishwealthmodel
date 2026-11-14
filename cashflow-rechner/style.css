@@ -688,6 +688,29 @@ a { color: inherit; text-decoration: none; }
   margin: 0.3rem 0 0.45rem;
   line-height: 1.15;
 }
+.metric--sum { border-color: var(--border-gold); }
+.metric--sum .metric-note strong { color: var(--navy); font-weight: 500; }
+
+/* Die entscheidende Zahl wird hervorgehoben, der Schnellfilter bleibt zurueck. */
+.metric--key { background: var(--gold-pale); border-color: var(--border-gold); }
+.metric--key .metric-value { font-size: 1.85rem; }
+.metric--key .metric-label { color: var(--gold); }
+.metric--key .metric-note strong { color: var(--navy); font-weight: 500; }
+
+.metric--prefilter {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--border);
+}
+.metric--prefilter .metric-value { font-size: 1.3rem; color: var(--stone); }
+.metric-verdict {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--stone);
+  letter-spacing: 0.02em;
+}
+
 .metric-note {
   margin: 0;
   font-size: 0.76rem;

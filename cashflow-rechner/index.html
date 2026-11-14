@@ -84,7 +84,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20261114h" />
+  <link rel="stylesheet" href="style.css?v=20261114k" />
   <script src="../site-consent.js?v=20261102" defer></script>
   <script src="../nav-menu.js?v=20261014" defer></script>
 </head>
@@ -224,7 +224,7 @@
                 <label class="field">
                   <span>Laufzeit (Jahre)</span>
                   <input id="loanTerm" type="number" min="1" step="1" />
-                  <small>Verschiebt Geld zwischen Rate und Tilgung — die Rendite ändert sich dadurch nicht.</small>
+                  <small>Länger heißt kleinere Rate und mehr Cashflow, aber weniger Tilgung. Die Eigenkapitalrendite im ersten Jahr bleibt deshalb gleich — über die Jahre zahlst du aber deutlich mehr Zinsen.</small>
                 </label>
                 <label class="field">
                   <span>Jährliche Wertsteigerung (%)</span>
@@ -260,22 +260,34 @@
           <div class="metric">
             <div class="metric-label">Freier Cashflow</div>
             <div class="metric-value" id="resultFreeCashFlow"></div>
-            <p class="metric-note">Was tatsächlich auf deinem Konto landet. Entscheidend ist das Vorzeichen, nicht die Höhe.</p>
+            <p class="metric-note">Was tatsächlich auf deinem Konto landet.</p>
           </div>
           <div class="metric">
             <div class="metric-label">Vermögensaufbau durch Tilgung</div>
             <div class="metric-value" id="resultPrincipalWealth"></div>
             <p class="metric-note">Kein Geld auf dem Konto, aber Vermögen: Dein Mieter zahlt deinen Kredit ab.</p>
           </div>
-          <div class="metric">
+          <div class="metric metric--sum">
+            <div class="metric-label">Gesamter Kapitalaufbau pro Jahr</div>
+            <div class="metric-value" id="resultEconomicEffect"></div>
+            <p class="metric-note">Freier Cashflow <strong>plus</strong> Tilgung — was dir dieses Objekt im Jahr tatsächlich einbringt, vor Steuern.</p>
+            <p class="metric-note" data-appreciation hidden>Mit deiner Wertsteigerung wären es <strong id="resultEconomicEffectAppreciation"></strong>.</p>
+          </div>
+          <div class="metric metric--key">
             <div class="metric-label">Eigenkapitalrendite (ROE)</div>
             <div class="metric-value" id="resultRoe"></div>
-            <p class="metric-note">Cashflow plus Tilgung, bezogen auf dein Eigenkapital. Damit vergleichst du zwei Objekte.</p>
+            <p class="metric-note">Der Kapitalaufbau oben, geteilt durch dein Eigenkapital. <strong>Die entscheidende Zahl</strong> — damit vergleichst du zwei Objekte und misst dich am ETF.</p>
           </div>
-          <div class="metric" data-appreciation hidden>
+          <div class="metric metric--key" data-appreciation hidden>
             <div class="metric-label">ROE inkl. Wertsteigerung</div>
             <div class="metric-value" id="resultRoeAppreciation"></div>
             <p class="metric-note">Beruht auf deiner Annahme zur Wertsteigerung, nicht auf Einnahmen.</p>
+          </div>
+          <div class="metric metric--prefilter">
+            <div class="metric-label">Bruttomietrendite</div>
+            <div class="metric-value" id="resultGrossYield"></div>
+            <p class="metric-verdict" id="grossYieldVerdict"></p>
+            <p class="metric-note">Jahresmiete geteilt durch Kaufpreis, ohne Nebenkosten und ohne Finanzierung. Der erste Blick aufs Inserat — mehr nicht.</p>
           </div>
         </div>
 
@@ -361,27 +373,22 @@
                   <dt>Tilgungsanteil Jahr 1</dt>
                   <dd id="resultPrincipalYear1"></dd>
                 </div>
-              </dl>
-            </section>
-
-            <section class="result-card">
-              <h3>Gesamteffekt</h3>
-              <dl class="result-list">
                 <div>
-                  <dt>Cashflow plus Tilgung <span class="inline-meta">— Grundlage der Eigenkapitalrendite</span></dt>
-                  <dd id="resultEconomicEffect" class="metric-emphasis"></dd>
-                </div>
-                <div data-appreciation hidden>
-                  <dt>Gesamteffekt inkl. Wertsteigerung</dt>
-                  <dd id="resultEconomicEffectAppreciation" class="metric-emphasis"></dd>
+                  <dt>Zinsen über die gesamte Laufzeit <span class="inline-meta">— hier entscheidet die Laufzeit</span></dt>
+                  <dd id="resultTotalInterest"></dd>
                 </div>
               </dl>
               <p class="result-card-note">
-                Dieselbe Zahl ergibt sich, wenn man von der Jahresmiete nur die Zinsen und die
-                laufenden Kosten abzieht — ohne Tilgung. Deshalb ändert eine längere Laufzeit zwar
-                deinen monatlichen Cashflow, nicht aber deine Rendite.
+                Der Zinsanteil im ersten Jahr hängt nur an der Darlehenssumme, nicht an der Laufzeit.
+                Deshalb ändert eine längere Laufzeit zwar deinen monatlichen Cashflow, nicht aber den
+                Kapitalaufbau und die Eigenkapitalrendite: Was du an Rate sparst, sparst du an Tilgung.
+                <br><br>
+                Der Rechner zeigt das <strong>erste Jahr</strong>. Über die gesamte Laufzeit macht sie
+                sehr wohl einen Unterschied — siehe die Zinsen über die gesamte Laufzeit darüber.
               </p>
             </section>
+
+
           </div>
         </details>
       </section>
@@ -423,7 +430,7 @@
     <div class="footer-copy">spanishwealthmodel.com</div>
   </footer>
 
-  <script src="script.js?v=20261114g-de"></script>
+  <script src="script.js?v=20261114k-de"></script>
 </body>
 
 </html>
