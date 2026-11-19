@@ -84,7 +84,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20261114k" />
+  <link rel="stylesheet" href="style.css?v=20261116a" />
   <script src="../site-consent.js?v=20261102" defer></script>
   <script src="../nav-menu.js?v=20261014" defer></script>
 </head>
@@ -113,8 +113,9 @@
       <p class="eyebrow">Kostenloser Cashflow-Rechner</p>
       <h1>Cashflow-Rechner für Immobilien in Spanien</h1>
       <p class="subtitle">
-        Vier Zahlen eintragen und in zwei Minuten sehen, ob sich eine Wohnung selbst trägt.
-        Bewusst konservativ gerechnet und ohne Steuern — als Vorauswahl, bevor du ernsthaft weitermachst.
+        Zum Durchsieben von Inseraten: Finanzierung einmal einstellen, danach genügen Kaufpreis und
+        Miete. Bewusst konservativ gerechnet und ohne Steuern — als Vorauswahl, bevor du ernsthaft
+        weitermachst.
       </p>
       <p class="book-reference">
         Basiert auf dem Cashflow-Modell aus Phase 3 des Buchs <strong>Das Spanische Vermögensmodell</strong>.
@@ -133,32 +134,28 @@
         </div>
 
         <div class="inline-note">
-          Vier Zahlen genügen für ein erstes Urteil. Alles andere ist mit realistischen Werten
-          vorbelegt — voreingestellt ist eine Wohnung in Valencia.
+          Zum Durchsieben von Inseraten: Stell deine Finanzierung einmal unter „Annahmen anpassen“
+          ein, danach genügen pro Objekt <strong>zwei Zahlen</strong>. Voreingestellt ist eine
+          Wohnung in Valencia.
         </div>
 
         <section class="input-section">
-          <h3>Die vier Zahlen</h3>
+          <h3>Das Objekt</h3>
           <div class="field-grid">
             <label class="field">
               <span>Kaufpreis (€)</span>
               <input id="purchasePrice" type="number" min="0" step="1000" />
-              <small>Was im Inserat steht. Nebenkosten kommen separat dazu.</small>
+              <small>Was im Inserat steht. Nebenkosten und Renovierung kommen separat dazu.</small>
             </label>
             <label class="field">
               <span>Monatliche Miete (€)</span>
               <input id="monthlyRent" type="number" min="0" step="50" />
               <small>Die Miete, für die du heute einen Vertrag bekämst — nicht die erhoffte.</small>
             </label>
-            <label class="field">
-              <span>Eigenkapital (€)</span>
-              <input id="equity" type="number" min="0" step="1000" />
-              <small>Dein eingesetztes Geld. Darlehen und Beleihungsauslauf ergeben sich daraus.</small>
-            </label>
-            <label class="field">
-              <span>Sollzins (% p.&nbsp;a.)</span>
-              <input id="interestRate" type="number" min="0" step="0.1" />
-              <small>Spanische Konditionen ansetzen, nicht deutsche.</small>
+            <label class="field field-wide">
+              <span>Beleihung durch die Bank (% vom Kaufpreis)</span>
+              <input id="ltvPercent" type="number" min="0" max="100" step="1" />
+              <small>Die Zahl, die dir deine Bank nennt. Üblich sind bis zu 80&nbsp;%. Wie viel Eigenkapital du brauchst, ergibt sich daraus.</small>
             </label>
           </div>
           <div id="equityHint" class="status-hint" aria-live="polite"></div>
@@ -177,12 +174,17 @@
                 <label class="field">
                   <span>Grunderwerbsteuer / ITP (%) <a class="fn" href="#cost-notes">*</a></span>
                   <input id="itpPercent" type="number" min="0" step="0.1" />
-                  <small>Je autonomer Region verschieden. Valencia 10&nbsp;%, Madrid 6&nbsp;%.</small>
+                  <small>Je autonomer Region verschieden. Comunidad Valenciana seit Juni 2026 9&nbsp;%, Madrid 6&nbsp;%.</small>
                 </label>
                 <label class="field">
                   <span>Weitere Kaufnebenkosten (%) <a class="fn" href="#cost-notes">**</a></span>
                   <input id="ancillaryPercent" type="number" min="0" step="0.1" />
                   <small>Notar, Registro, Gestoría, Makler. Üblich sind 2 bis 6&nbsp;%.</small>
+                </label>
+                <label class="field field-wide">
+                  <span>Renovierung vor der Vermietung (€)</span>
+                  <input id="renovation" type="number" min="0" step="500" />
+                  <small>Was du nach dem Kauf hineinsteckst, bevor der erste Mieter einzieht. Zählt zur Investition und erhöht bei gleichem Eigenkapital die Darlehenssumme.</small>
                 </label>
               </div>
             </section>
@@ -219,8 +221,13 @@
             </section>
 
             <section class="input-section">
-              <h3>Laufzeit und Wertsteigerung</h3>
+              <h3>Finanzierung und Wertsteigerung</h3>
               <div class="field-grid">
+                <label class="field">
+                  <span>Sollzins (% p.&nbsp;a.)</span>
+                  <input id="interestRate" type="number" min="0" step="0.1" />
+                  <small>Spanische Konditionen ansetzen, nicht deutsche. Fest verhandeln.</small>
+                </label>
                 <label class="field">
                   <span>Laufzeit (Jahre)</span>
                   <input id="loanTerm" type="number" min="1" step="1" />
@@ -257,6 +264,11 @@
         </section>
 
         <div class="metric-row">
+          <div class="metric metric--need">
+            <div class="metric-label">Dafür brauchst du</div>
+            <div class="metric-value" id="resultEquity"></div>
+            <p class="metric-note">Eigenkapital: der Teil des Kaufpreises, den die Bank nicht finanziert, plus Nebenkosten und Renovierung.</p>
+          </div>
           <div class="metric">
             <div class="metric-label">Freier Cashflow</div>
             <div class="metric-value" id="resultFreeCashFlow"></div>
@@ -326,7 +338,11 @@
                   <dd id="resultClosingCosts"></dd>
                 </div>
                 <div>
-                  <dt>Gesamtinvestition</dt>
+                  <dt>Renovierung</dt>
+                  <dd id="resultRenovation"></dd>
+                </div>
+                <div>
+                  <dt>Gesamtinvestition <span class="inline-meta">— Kaufpreis, Nebenkosten und Renovierung</span></dt>
                   <dd id="resultTotalInvestment"></dd>
                 </div>
                 <div>
@@ -334,7 +350,7 @@
                   <dd id="resultLoanAmount"></dd>
                 </div>
                 <div>
-                  <dt>Beleihungsauslauf (LTV) <span class="inline-meta">— automatisch berechnet</span></dt>
+                  <dt>Beleihungsauslauf (LTV) <span class="inline-meta">— Anteil am Kaufpreis</span></dt>
                   <dd id="resultLtv"></dd>
                 </div>
               </dl>
@@ -430,7 +446,7 @@
     <div class="footer-copy">spanishwealthmodel.com</div>
   </footer>
 
-  <script src="script.js?v=20261114k-de"></script>
+  <script src="script.js?v=20261116-de"></script>
 </body>
 
 </html>

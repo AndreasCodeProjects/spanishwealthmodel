@@ -1,10 +1,11 @@
 const defaults = {
   purchasePrice: 143000,
-  itpPercent: 10,
+  itpPercent: 9,
   ancillaryPercent: 2,
+  renovation: 0,
   monthlyRent: 1000,
   vacancyMonths: 1,
-  equity: 60060,
+  ltvPercent: 70,
   interestRate: 4,
   loanTerm: 20,
   maintenanceMode: 'percent',
@@ -25,9 +26,11 @@ const elements = {
   purchasePrice: document.getElementById('purchasePrice'),
   itpPercent: document.getElementById('itpPercent'),
   ancillaryPercent: document.getElementById('ancillaryPercent'),
+  renovation: document.getElementById('renovation'),
   monthlyRent: document.getElementById('monthlyRent'),
   vacancyMonths: document.getElementById('vacancyMonths'),
-  equity: document.getElementById('equity'),
+  ltvPercent: document.getElementById('ltvPercent'),
+  resultEquity: document.getElementById('resultEquity'),
   interestRate: document.getElementById('interestRate'),
   loanTerm: document.getElementById('loanTerm'),
   maintenanceValue: document.getElementById('maintenanceValue'),
@@ -50,6 +53,7 @@ const elements = {
   resultTransferTax: document.getElementById('resultTransferTax'),
   resultAncillaryCosts: document.getElementById('resultAncillaryCosts'),
   resultClosingCosts: document.getElementById('resultClosingCosts'),
+  resultRenovation: document.getElementById('resultRenovation'),
   resultTotalInvestment: document.getElementById('resultTotalInvestment'),
   resultLoanAmount: document.getElementById('resultLoanAmount'),
   resultLtv: document.getElementById('resultLtv'),
@@ -92,7 +96,7 @@ function hasEnoughDataForResult() {
   return [
     elements.purchasePrice,
     elements.monthlyRent,
-    elements.equity,
+    elements.ltvPercent,
     elements.interestRate,
     elements.loanTerm,
   ].every((input) => input.value !== '' && Number.isFinite(Number.parseFloat(input.value)));
@@ -183,7 +187,9 @@ function updateAssumptionSummary() {
   elements.assumptionSummary.textContent = [
     `ITP ${formatNumber(state.itpPercent)} %`,
     `Nebenkosten ${formatNumber(state.ancillaryPercent)} %`,
+    ...(state.renovation > 0 ? [`Renovierung ${formatCurrency(state.renovation)}`] : []),
     leerstand,
+    `${formatPercent(state.interestRate)} Zins`,
     `${formatNumber(state.loanTerm)} Jahre Laufzeit`,
     ruecklage,
     wertsteigerung,
@@ -232,9 +238,10 @@ const INPUT_KEYS = [
   'purchasePrice',
   'itpPercent',
   'ancillaryPercent',
+  'renovation',
   'monthlyRent',
   'vacancyMonths',
-  'equity',
+  'ltvPercent',
   'interestRate',
   'loanTerm',
   'maintenanceValue',
@@ -316,14 +323,14 @@ function getAssessment(roe) {
 // mit zwei Prozentpunkten mehr durch.
 const ZINS_AUFSCHLAG = 2;
 
-function getRateStress({ loanAmount, annualRent, maintenance, otherCosts }) {
+function getRateStress({ loanAmount, equity, annualRent, maintenance, otherCosts }) {
   if (loanAmount <= 0) return null;
 
   const stressRate = (state.interestRate + ZINS_AUFSCHLAG) / 100;
   const stressAnnuity = calculateAnnuity(stressRate === 0 ? 0 : loanAmount, stressRate, state.loanTerm);
   const stressFreeCashFlow = annualRent - stressAnnuity - maintenance - otherCosts;
   const stressEffect = annualRent - loanAmount * stressRate - maintenance - otherCosts;
-  const stressRoe = state.equity > 0 ? (stressEffect / state.equity) * 100 : 0;
+  const stressRoe = equity > 0 ? (stressEffect / equity) * 100 : 0;
 
   return {
     monat: stressFreeCashFlow / 12,
@@ -485,9 +492,10 @@ function recalculate() {
   state.purchasePrice = clamp(readNumber(elements.purchasePrice, defaults.purchasePrice), 0);
   state.itpPercent = clamp(readNumber(elements.itpPercent, defaults.itpPercent), 0);
   state.ancillaryPercent = clamp(readNumber(elements.ancillaryPercent, defaults.ancillaryPercent), 0);
+  state.renovation = clamp(readNumber(elements.renovation, defaults.renovation), 0);
   state.monthlyRent = clamp(readNumber(elements.monthlyRent, defaults.monthlyRent), 0);
   state.vacancyMonths = clamp(readNumber(elements.vacancyMonths, defaults.vacancyMonths), 0, 12);
-  state.equity = clamp(readNumber(elements.equity, defaults.equity), 0);
+  state.ltvPercent = clamp(readNumber(elements.ltvPercent, defaults.ltvPercent), 0, 100);
   state.interestRate = clamp(readNumber(elements.interestRate, defaults.interestRate), 0);
   state.loanTerm = clamp(readNumber(elements.loanTerm, defaults.loanTerm), 1);
   state.maintenanceValue = clamp(readNumber(elements.maintenanceValue, defaults.maintenanceValue), 0);
@@ -497,10 +505,14 @@ function recalculate() {
   const transferTax = state.purchasePrice * (state.itpPercent / 100);
   const ancillaryCosts = state.purchasePrice * (state.ancillaryPercent / 100);
   const closingCosts = transferTax + ancillaryCosts;
-  const totalInvestment = state.purchasePrice + closingCosts;
-  const rawLoanAmount = totalInvestment - state.equity;
-  const loanAmount = Math.max(rawLoanAmount, 0);
-  const ltv = state.purchasePrice > 0 ? (loanAmount / state.purchasePrice) * 100 : 0;
+  // Eine Renovierung gehoert zur Investition, nicht zu den laufenden Kosten.
+  const totalInvestment = state.purchasePrice + closingCosts + state.renovation;
+  // Die Bank finanziert einen Anteil des Kaufpreises. Wie viel Eigenkapital noetig
+  // ist, ergibt sich daraus - inklusive Nebenkosten und Renovierung, die kein
+  // Darlehen abdeckt.
+  const loanAmount = state.purchasePrice * (state.ltvPercent / 100);
+  const equity = Math.max(totalInvestment - loanAmount, 0);
+  const ltv = state.ltvPercent;
   const annualRent = state.monthlyRent * (12 - state.vacancyMonths);
   const maintenance =
     state.maintenanceMode === 'percent'
@@ -516,18 +528,19 @@ function recalculate() {
   const appreciationAmount = state.purchasePrice * (state.appreciationRate / 100);
   const totalEconomicEffect = freeCashFlow + principalYear1;
   const totalEconomicEffectWithAppreciation = totalEconomicEffect + appreciationAmount;
-  const roe = state.equity > 0 ? (totalEconomicEffect / state.equity) * 100 : 0;
-  const roeWithAppreciation = state.equity > 0 ? (totalEconomicEffectWithAppreciation / state.equity) * 100 : 0;
+  const roe = equity > 0 ? (totalEconomicEffect / equity) * 100 : 0;
+  const roeWithAppreciation = equity > 0 ? (totalEconomicEffectWithAppreciation / equity) * 100 : 0;
 
-  elements.equityHint.textContent =
-    rawLoanAmount < 0
-      ? 'Dein Eigenkapital übersteigt die Gesamtinvestition. Die Darlehenssumme wird deshalb auf 0 € und der LTV auf 0,0 % gesetzt.'
-      : '';
+  elements.equityHint.textContent = equity <= 0
+    ? 'Das Darlehen deckt die gesamte Investition. Eine Eigenkapitalrendite lässt sich dann nicht sinnvoll berechnen.'
+    : `Dafür brauchst du ${formatCurrency(equity)} Eigenkapital — Nebenkosten und Renovierung zahlt keine Bank mit.`;
 
   setText('resultTransferTax', formatCurrency(transferTax));
   setText('resultAncillaryCosts', formatCurrency(ancillaryCosts));
   setText('resultClosingCosts', formatCurrency(closingCosts));
+  setText('resultRenovation', formatCurrency(state.renovation));
   setText('resultTotalInvestment', formatCurrency(totalInvestment));
+  setText('resultEquity', formatCurrency(equity));
   setText('resultLoanAmount', formatCurrency(loanAmount));
   setText('resultLtv', formatPercent(ltv));
   setText('resultAnnualRent', formatCurrency(annualRent));
@@ -554,7 +567,7 @@ function recalculate() {
 
   renderVerdictScope(roe, roeWithAppreciation);
   renderRateStress(
-    getRateStress({ loanAmount, annualRent, maintenance, otherCosts: state.otherCosts }),
+    getRateStress({ loanAmount, equity, annualRent, maintenance, otherCosts: state.otherCosts }),
     freeCashFlowMonth,
   );
   updateAssumptionSummary();

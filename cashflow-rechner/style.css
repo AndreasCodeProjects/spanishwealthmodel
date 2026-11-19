@@ -688,6 +688,9 @@ a { color: inherit; text-decoration: none; }
   margin: 0.3rem 0 0.45rem;
   line-height: 1.15;
 }
+.metric--need { border-color: var(--navy-light); }
+.metric--need .metric-label { color: var(--navy); }
+
 .metric--sum { border-color: var(--border-gold); }
 .metric--sum .metric-note strong { color: var(--navy); font-weight: 500; }
 
