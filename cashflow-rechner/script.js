@@ -284,36 +284,38 @@ function calculateAnnuity(loanAmount, interestRate, years) {
   return loanAmount * ((i * factor) / (factor - 1));
 }
 
-// Massstab der Bewertung ist ein breit gestreuter ETF mit rund 7 % im Jahr.
-// Wer Kapital in einem einzelnen Objekt bindet und Arbeit hineinsteckt, sollte
-// spuerbar darueber liegen. Gerechnet wird vor Steuern und ohne Wertsteigerung.
-const ETF_VERGLEICH = 7;
+// Massstab der Bewertung ist ein breit gestreuter ETF mit rund 8 % im Jahr
+// (MSCI World, rollierende 15 Jahre seit 1975). Wer Kapital in einem einzelnen
+// Objekt bindet und Arbeit hineinsteckt, sollte spuerbar darueber liegen.
+// Gerechnet wird vor Steuern und ohne Wertsteigerung - anders als beim ETF,
+// in dessen Rendite der Kursgewinn bereits steckt.
+const ETF_VERGLEICH = 8;
 
 function getAssessment(roe) {
-  if (roe < 4) {
+  if (roe < 5) {
     return {
       badge: '⚠️ Unter der Zielrendite',
-      range: 'Eigenkapitalrendite unter 4 % — weniger als ein ETF',
+      range: 'Eigenkapitalrendite unter 5 % — weniger als ein ETF',
       tone: 'is-warning-soft',
     };
   }
   if (roe < ETF_VERGLEICH) {
     return {
       badge: '⚠️ Etwa auf ETF-Niveau',
-      range: 'Eigenkapitalrendite zwischen 4 % und 7 %',
+      range: 'Eigenkapitalrendite zwischen 5 % und 8 %',
       tone: 'is-warning',
     };
   }
-  if (roe <= 12) {
+  if (roe <= 13) {
     return {
       badge: '✅ Attraktiv',
-      range: 'Eigenkapitalrendite zwischen 7 % und 12 % — über ETF-Niveau',
+      range: 'Eigenkapitalrendite zwischen 8 % und 13 % — über ETF-Niveau',
       tone: 'is-positive',
     };
   }
   return {
     badge: 'Starkes Ergebnis — Annahmen prüfen',
-    range: 'Eigenkapitalrendite über 12 % — in diesem Markt ungewöhnlich',
+    range: 'Eigenkapitalrendite über 13 % — in diesem Markt ungewöhnlich',
     tone: 'is-strong',
   };
 }
@@ -398,7 +400,7 @@ function getInterpretation(roe, freeCashFlow) {
     return 'Das Objekt trägt sich nach Finanzierung nicht selbst — du zahlst jeden Monat zu. Prüfe Kaufpreis, Finanzierung oder die angesetzte Miete.';
   }
 
-  if (roe < 4) {
+  if (roe < 5) {
     return 'Das Objekt deckt seine Kosten, aber es bleibt weniger übrig als bei einem breit gestreuten ETF — bei deutlich mehr Aufwand, weniger Liquidität und dem Risiko eines einzelnen Objekts.';
   }
 
@@ -406,7 +408,7 @@ function getInterpretation(roe, freeCashFlow) {
     return 'Das liegt etwa auf dem Niveau eines breit gestreuten ETF. Dafür bindest du Kapital in einem einzelnen Objekt und steckst Arbeit hinein. Das lohnt sich nur mit einem guten Grund.';
   }
 
-  if (roe <= 12) {
+  if (roe <= 13) {
     return 'Attraktiver Basisfall. Das Objekt liegt spürbar über dem, was ein breit gestreuter ETF liefert, und entschädigt damit für Aufwand und Klumpenrisiko.';
   }
 
@@ -422,9 +424,9 @@ const MASSSTAB = `
   Arbeit, jederzeit verkäuflich.</p>
   <p><strong>Der Vergleich hinkt dabei zugunsten des ETF.</strong> Dessen Rendite
   enthält den Kursgewinn. Die Eigenkapitalrendite hier enthält <em>weder Wertsteigerung noch
-  Steuerwirkung</em> — beides käme bei der Wohnung noch obendrauf. Deshalb liegt
-  die Schwelle für „attraktiv“ bei 7&nbsp;% und nicht höher: Wer sie auf dieser
-  bewusst pessimistischen Rechnung erreicht, liegt real darüber.</p>
+  Steuerwirkung</em> — beides käme bei der Wohnung noch obendrauf. Wer die
+  8&nbsp;% auf dieser bewusst pessimistischen Rechnung erreicht, liegt real
+  also darüber.</p>
 `;
 
 const HEBEL = `
@@ -446,7 +448,7 @@ function getAssessmentNote(roe, freeCashFlow) {
     `;
   }
 
-  if (roe < 4) {
+  if (roe < 5) {
     return `
       <p>Dafür bindest du Kapital, nimmst Kredit auf und hast Arbeit mit Mietern,
       Handwerkern und Behörden. Dieses Verhältnis geht nicht auf.</p>
@@ -467,7 +469,7 @@ function getAssessmentNote(roe, freeCashFlow) {
     `;
   }
 
-  if (roe <= 12) {
+  if (roe <= 13) {
     return `
       <p>Prüfe trotzdem, ob die angesetzte Miete dauerhaft erzielbar ist. Sie ist
       die Zahl, bei der sich die meisten selbst betrügen — und sie trägt das
