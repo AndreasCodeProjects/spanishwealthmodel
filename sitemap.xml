@@ -7,8 +7,20 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://spanishwealthmodel.com/rechner/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://spanishwealthmodel.com/cashflow-rechner/</loc>
-    <lastmod>2026-11-14</lastmod>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://spanishwealthmodel.com/beckham-rechner/</loc>
+    <lastmod>2026-11-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
